@@ -16,7 +16,7 @@ public class Project {
 	private List<Computer> computers =  new ArrayList<Computer>();
 	private List<Activity> activities =  new ArrayList<Activity>();
 	private List<Dev> dailyDevs = new ArrayList<Dev>();
-	
+
 	public void setLifeCycleModel() {
 
 	}
@@ -73,12 +73,21 @@ public class Project {
 		for (int i=0;i<quantity;++i) {
 			computers.add(new Computer());
 			money -= Computer.getPrice();
-			
+
 		}
 		return money;
 	}
 
 	public double rmComputer(int quantity) {
+		while (quantity != 0 ) {
+			Computer c = computers.get(0);
+			money += Computer.getPricePenalized();
+			Activity a = c.getActivity();
+			if (!a.equals(null)){
+				a.rmComputer(c);
+			}
+			--quantity;
+		}
 		return 0;
 	}
 
@@ -92,7 +101,7 @@ public class Project {
 			a = null;
 		}
 
-		
+
 		return a;
 	}
 
@@ -114,7 +123,7 @@ public class Project {
 				a.rmComputers(qnt);
 				success = -qnt;
 			}
-			
+
 			else if (computerNo < qnt) {
 				qnt = qnt - computerNo; //adicionar o delta 
 				List<Computer> idleComp = getIdleComputers(); //obtem lista de todos os idle computers
@@ -127,7 +136,7 @@ public class Project {
 		catch (Exception e){
 			e.printStackTrace();
 		}
-		
+
 		return success;
 	}
 

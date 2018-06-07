@@ -10,7 +10,7 @@ public class Activity {
 	private String name;
 	private List<Dev> devs =  new ArrayList<Dev>();
 	private List<Computer> computers =  new ArrayList<Computer>();;
-	
+
 	public void work(double productivity) {
 
 	}
@@ -36,7 +36,7 @@ public class Activity {
 		for(Computer c : idleComp) { //percorre lista de idle computers
 			addComputer(c);//relaciona computer a activity
 		}
-		
+
 	}
 
 	public void rmComputers(int qnt) {
@@ -47,9 +47,9 @@ public class Activity {
 
 	public void rmComputerAny() {
 		try {
-		Computer c = computers.get(0);
-		c.unsetActivity();
-		computers.remove(c);
+			Computer c = computers.get(0);
+			c.unsetActivity();
+			computers.remove(c);
 		}
 		catch (Exception e){
 			e.printStackTrace();
