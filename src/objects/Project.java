@@ -85,7 +85,7 @@ public class Project {
 		return null;
 	}
 
-	public Dev getActivityDevs(int actID) {
+	public List<Dev> getActivityDevs(int actID) {
 		return null;
 	}
 
@@ -93,7 +93,7 @@ public class Project {
 		return 0;
 	}
 
-	public Computer getIdleComputers() {
+	public List<Computer> getIdleComputers() {
 		return null;
 	}
 
