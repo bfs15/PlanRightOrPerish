@@ -28,11 +28,11 @@ public class User {
             int stageID = project.newStage(stageName);
             int actID;
 
-            actID = readAddActivityToStage();
+            actID = readAddActivityToStage(stageName);
             while (actID > 0) {
                 project.addActivity(stageID, actID);
 
-                actID = readAddActivityToStage();
+                actID = readAddActivityToStage(stageName);
 
             }
 
@@ -82,7 +82,7 @@ public class User {
         return scanner.nextLine();
     }
 
-    private static int readAddActivityToStage(){
+    private static int readAddActivityToStage(String stageName){
         System.out.println("Type ID of the activity to add to stage " + stageName + " (type \"-1\" to complete)");
         return scanner.nextInt();
     }
@@ -107,11 +107,7 @@ public class User {
     }
 
     private static void menuActivities(){
-        printIdleDevs();
-        printActivities();
-        System.out.println("1: Allocate Developer");
-        System.out.println("2: Deallocate Developer");
-        System.out.println("3: Set computers");
+        menuActivitiesPrint();
         int choice = choose();
         while(choice != 0){
             System.out.println("Type the ID of the activity");
@@ -132,20 +128,35 @@ public class User {
                     break;
 
                 case 3:
-                    int idleNo = project.getIdleComputers().size();
-                    int computerNo = project.getComputers().size();
-                    System.out.println("Project computers usage " + idleNo + "/" + computerNo);
+                    printComputerUsage();
                     System.out.println("Type the set quantity you want for this activity");
                     devID = scanner.nextInt();
                     project.addDevOnActivity(actID, devID);
                     break;
+                default:
+                    System.out.println("Invalid action");
+                    break;
             }
 
-            printActivities();
-            System.out.println("1: Allocate Developer");
-            System.out.println("2: Deallocate Developer");
-            System.out.println("3: Set computers");
+            menuActivitiesPrint();
             choice = choose();
+        }
+    }
+    private static void menuActivitiesPrint(){
+        printIdleDevs();
+        printActivities();
+        System.out.println("1: Allocate Developer");
+        System.out.println("2: Deallocate Developer");
+        System.out.println("3: Set computers");
+        System.out.println("0: Exit");
+    }
+
+
+    private static void printIdleDevs(){
+        System.out.println("Idle developers");
+        List<Dev> devList = project.getIdleDevs();
+        for (Dev d : devList) {
+            print(d);
         }
     }
 
@@ -167,17 +178,92 @@ public class User {
     }
 
     private static void menuDevelopers(){
-        printDevelopers();
-        while(){
+        menuDevelopersPrint();
+        int choice = choose();
 
+        while(choice != 0){
+            int devID;
+            switch (choice){
+                case 1:
+                    // Print daily devs
+                    List<Dev> dailyDevs = project.getDailyDevs();
+                    for(Dev d : dailyDevs){
+                        print(d);
+                    }
+
+                    System.out.println("Type the ID of the developer to hire");
+                    devID = scanner.nextInt();
+                    project.addDev(devID);
+                    break;
+
+                case 2:
+                    System.out.println("Type the ID of the developer to dismiss");
+                    devID = scanner.nextInt();
+                    project.rmDev(devID);
+                    break;
+
+                default:
+                    System.out.println("Invalid action");
+                    break;
+            }
+            menuDevelopersPrint();
+            choice = choose();
         }
     }
 
-    private static void menuComputers(){
-        printComputers();
-
-        while(){
-
+    private static void menuDevelopersPrint(){
+        // Print devs
+        List<Dev> devs = project.getDevs();
+        for(Dev d : devs){
+            print(d);
         }
+        System.out.println("1: Hire");
+        System.out.println("2: Dismiss");
+        System.out.println("0: Exit");
+    }
+
+    private static void printComputerUsage(){
+        int idleNo = project.getIdleComputers().size();
+        int computerNo = project.getComputers().size();
+        System.out.println("Project computers usage " + idleNo + "/" + computerNo);
+    }
+
+    private static void menuComputers(){
+        int choice;
+
+        menuComputersPrint();
+        choice = choose();
+        while(choice != 0){
+            int quantity;
+            switch (choice){
+                case 1:
+                    System.out.println("Type the quantity to buy");
+                    quantity = scanner.nextInt();
+                    project.addComputer(quantity);
+                    break;
+
+                case 2:
+                    System.out.println("Type the quantity to sell");
+                    quantity = scanner.nextInt();
+                    project.rmComputer(quantity);
+                    break;
+
+                default:
+                    System.out.println("Invalid action");
+                    break;
+            }
+
+            menuComputersPrint();
+            choice = choose();
+        }
+    }
+
+    private static void menuComputersPrint(){
+        printComputerUsage();
+        System.out.println("price per computer: " + Computer.getPrice());
+        System.out.println("sell value: " + Computer.getSellPrice());
+        System.out.println("1: Buy");
+        System.out.println("2: Sell");
+        System.out.println("0: Exit");
     }
 }

@@ -57,7 +57,7 @@ public class Project {
 		return false;
 	}
 
-	public Dev getIdleDevs() {
+	public List<Dev> getIdleDevs() {
 		return null;
 	}
 
