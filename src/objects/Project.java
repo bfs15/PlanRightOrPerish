@@ -70,7 +70,13 @@ public class Project {
 	}
 
 	public double addComputer(int quantity) {
-		return 0;
+		double money = 0.0;
+		for (int i=0;i<quantity;++i) {
+			computers.add(new Computer());
+			money += Computer.getPrice();
+			
+		}
+		return money;
 	}
 
 	public double rmComputer(int quantity) {

@@ -11,15 +11,15 @@ public class Computer {
 	}
 
 	public Computer() {
-
+		activity = null;
 	}
 
 	/*public ~Computer() {
 
 	}*/
-
+	
 	public void endDay() {
-
+		status.roll();
 	}
 
 	public void setActivity(Activity a) {
@@ -31,7 +31,7 @@ public class Computer {
 	}
 
 	public void unsetActivity() {
-
+		activity = null;
 	}
 
 	public Event getStatus() {
@@ -41,5 +41,6 @@ public class Computer {
 	public void setStatus(Event status) {
 		this.status = status;
 	}
+	
 
 }
