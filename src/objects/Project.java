@@ -83,10 +83,7 @@ public class Project {
 		return 0;
 	}
 
-	public Activity getActivity(int ID) {
-		return null;
-	}
-
+	
 	public Dev getDev(int ID) {
 		return null;
 	}
@@ -96,6 +93,7 @@ public class Project {
 	}
 
 	public int setComputer(int actID, int qnt) {
+		Activity a  = getActivity(actID);
 		return 0;
 	}
 
