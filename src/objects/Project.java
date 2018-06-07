@@ -1,5 +1,9 @@
 package objects;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +57,7 @@ public class Project {
 		return false;
 	}
 
-	public boolean rmDev() {
+	public boolean rmDev(int DevID) {
 		return false;
 	}
 
@@ -185,4 +189,78 @@ public class Project {
 		this.dailyDevs = dailyDevs;
 	}
 
+	public void openFile(String string) throws IOException {
+		// TODO Colocar no diagrama
+		boolean ReadingActivities = false;
+		int cont = 0;
+		String line = "";
+		String s = "";
+		Activity act = null ;
+		BufferedReader br = new BufferedReader(new FileReader(string));
+		try {
+		    StringBuilder sb = new StringBuilder();
+		    line =br.readLine();
+
+		    while (line != null) {
+		    	//System.out.println(line);
+		        if(!line.equals("Activities:")){
+		        	this.description = sb.toString();
+		        	sb.delete(0, sb.length()-1);
+		        	ReadingActivities = true;
+		        }
+		        line = br.readLine();
+		        if(!(line.equals("Name:") || line.equals("Description:"))){
+			        sb.append(line);
+			        sb.append(System.lineSeparator());
+		        }
+		        
+
+		        if(ReadingActivities){
+		        	
+		        	switch((cont%4)){
+			        	case 0:
+			        		act = new Activity();
+			        		act.setName(line); 
+			        		++cont;
+			        		break;
+		        		case 1:
+		        			act.setCost(Double.parseDouble(line));
+		        			++cont;
+		        			break;
+		        		case 2:
+		        			act.setType(line);
+		        			++cont;
+		        			break;
+		        		case 3:
+		        			activities.add(act);
+		        			++cont;
+		        			break;
+		        		default:			
+		        			break;
+		        	}
+		        }
+
+		    }
+		    s = sb.toString();
+		    
+		} finally {
+		    br.close();
+		}
+		//nome
+		//descrição
+		//atividades
+		
+	}
+
+	public int newStage(String stageName) {
+		// TODO Auto-generated method stub
+		Stage s = new Stage(stageName);
+		stages.add(s);
+		return stages.size()-1;		
+	}
+
+	public void addActivity(int stageID, int actID) {
+		// TODO Auto-generated method stub
+		
+	}
 }

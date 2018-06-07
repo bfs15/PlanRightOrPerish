@@ -180,4 +180,5 @@ public class User {
 
         }
     }
+    //TODO tirar todas as funções
 }

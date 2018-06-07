@@ -10,6 +10,12 @@ public class Stage {
 	private boolean complete;
 	private List<Activity> activities = new ArrayList<Activity>();
 	
+	public Stage(String stageName) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	public void endDay() {
 
 	}
