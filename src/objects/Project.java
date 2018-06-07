@@ -13,8 +13,8 @@ public class Project {
 	private Stage currentStage;
 	private List<Stage> stages = new ArrayList<Stage>();
 	private List<Dev> devs =  new ArrayList<Dev>();
-	private List<Computer> computers =  new ArrayList<Computer>();;
-	private List<Activity> activities =  new ArrayList<Activity>();;
+	private List<Computer> computers =  new ArrayList<Computer>();
+	private List<Activity> activities =  new ArrayList<Activity>();
 	private List<Dev> dailyDevs = new ArrayList<Dev>();
 	
 	public void setLifeCycleModel() {
@@ -70,10 +70,9 @@ public class Project {
 	}
 
 	public double addComputer(int quantity) {
-		double money = 0.0;
 		for (int i=0;i<quantity;++i) {
 			computers.add(new Computer());
-			money += Computer.getPrice();
+			money -= Computer.getPrice();
 			
 		}
 		return money;
@@ -83,7 +82,20 @@ public class Project {
 		return 0;
 	}
 
-	
+	public Activity getActivity(int ID) {
+		Activity a;
+		try {
+			a = activities.get(ID);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			a = null;
+		}
+
+		
+		return a;
+	}
+
 	public Dev getDev(int ID) {
 		return null;
 	}
@@ -92,13 +104,41 @@ public class Project {
 		return null;
 	}
 
-	public int setComputer(int actID, int qnt) {
-		Activity a  = getActivity(actID);
-		return 0;
+	public int setComputer(int actID, int qnt) { //actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
+		int success = 0;
+		try {
+			Activity a  = getActivity(actID);
+			int computerNo = a.getComputerNo();
+			if(computerNo > qnt) {
+				qnt = computerNo - qnt; //remover o delta
+				a.rmComputers(qnt);
+				success = -qnt;
+			}
+			
+			else if (computerNo < qnt) {
+				qnt = qnt - computerNo; //adicionar o delta 
+				List<Computer> idleComp = getIdleComputers(); //obtem lista de todos os idle computers
+				if(idleComp.size() >= qnt) { //se existem idle computers o suficiente
+					a.setComputers(qnt,idleComp);
+					success = qnt; 
+				}
+			}
+		} 
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		return success;
 	}
 
 	public List<Computer> getIdleComputers() {
-		return null;
+		List<Computer> idleComputers = new ArrayList<Computer>();
+		for (Computer c: computers){ 
+			if(!c.getActivity().equals(null)) {
+				idleComputers.add(c);
+			}
+		}
+		return idleComputers;
 	}
 
 	public String getDescription() {

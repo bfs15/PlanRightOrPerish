@@ -28,23 +28,36 @@ public class Activity {
 	}
 
 	public int getComputerNo() {
-		return 0;
+		int computerNo =  computers.size();
+		return computerNo;
 	}
 
-	public void setComputers(int qnt, Computer idleComp) {
-
+	public void setComputers(int qnt, List<Computer> idleComp) {
+		for(Computer c : idleComp) { //percorre lista de idle computers
+			addComputer(c);//relaciona computer a activity
+		}
+		
 	}
 
 	public void rmComputers(int qnt) {
-
+		for(int i = 0;i < qnt; ++i) {
+			rmComputerAny();
+		}
 	}
 
 	public void rmComputerAny() {
-
+		try {
+		Computer c = computers.get(0);
+		c.unsetActivity();
+		computers.remove(c);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public void addComputer(Computer c) {
-
+		c.setActivity(this); //relaciona activity a computer
 	}
 
 	public double getCost() {
