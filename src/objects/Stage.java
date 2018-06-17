@@ -36,8 +36,17 @@ public class Stage {
 		return workDays;
 	}
 
-	public void setWorkDays(int workDays) {
-		this.workDays = workDays;
+	public boolean setWorkDays(int workDays) {
+		boolean succ = false;
+		try {
+			this.workDays = workDays;
+			succ = true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+		return succ;
 	}
 
 	public boolean isComplete() {

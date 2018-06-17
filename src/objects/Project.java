@@ -17,16 +17,22 @@ public class Project {
 	private List<Activity> activities =  new ArrayList<Activity>();
 	private List<Dev> dailyDevs = new ArrayList<Dev>();
 
-	public void setLifeCycleModel() {
-
-	}
 
 	public boolean estabilishExpenses(double money) {
 		return false;
 	}
 
 	public boolean setSchedule(int stageID, int workDays) {
-		return false;
+		boolean success = false;
+		try{
+			Stage s = getStage(stageID);
+			success = s.setWorkDays(workDays);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		return success;
 	}
 
 	public boolean nextStage() {
