@@ -16,7 +16,15 @@ public class Activity {
 	}
 
 	public boolean addDev(Dev dev) {
-		return false;
+		boolean success = false;
+		try {
+			success = devs.add(dev);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+		
 	}
 
 	public boolean rmDev(Dev d) {

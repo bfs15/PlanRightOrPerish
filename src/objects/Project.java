@@ -51,15 +51,32 @@ public class Project {
 
 	}
 
-	public boolean addDailyDev() {
-		return false;
+	public boolean addDailyDev(Dev dev) {
+		boolean success = false;
+		try {
+			success = this.dailyDevs.add(dev);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return success;
 	}
 
 	public boolean addDev(int ID) {
-		return false;
+		boolean success = false;
+		try {
+			Dev dev = this.dailyDevs.get(ID);
+			success = devs.add(dev);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+		
 	}
 
-	public boolean rmDev() {
+	public boolean rmDev(int devID) {
 		return false;
 	}
 
@@ -236,7 +253,19 @@ public class Project {
 		this.activities = activities;
 	}
 
+	
 	public List<Dev> getDailyDevs() {
+		return dailyDevs;
+	}
+	
+	public List<Dev> generateDailyDevs() {
+		List<Dev> dailyDevs = new ArrayList<Dev>(); 
+		for (int i = 0; i < MAX_DAILY_DEVS ; ++i) {
+			Dev dev = new Dev();
+			dev = dev.rollDev(); //sim, ta meio bizarro
+			addDailyDev(dev);
+			
+		}
 		return dailyDevs;
 	}
 

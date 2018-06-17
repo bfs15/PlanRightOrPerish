@@ -1,5 +1,7 @@
 package objects;
 
+import java.util.Random;
+
 public class Dev {
 
 	private String name;
@@ -8,9 +10,9 @@ public class Dev {
 	private int role;
 	private Activity activity;
 	private Event status;
-
+	
 	public Dev() {
-
+		
 	}
 
 	public void endDay() {
@@ -20,9 +22,19 @@ public class Dev {
 	public double getSalary() {
 		return salary;
 	}
-
+	
 	public Dev rollDev() {
-		return null;
+		Random r = new Random();
+		this.name = getPossibleName(r.nextInt(possibleNames.size())); //obtem um nome aleatoriamente
+		this.productivity  = r.nextDouble() * MAX_PRODUCTIVITY; //(numero de 0 a 1) * valor limitante
+		//			   salarioBase +  (salarioBase * gananciaDoDev * produtividade)
+
+		this.salary = MIN_SALARY + (MIN_SALARY * r.nextDouble() *  this.productivity); //salario varia de acordo com a produtividade, mas sempre dentro de um maximo
+		//			Exemplo 1: 1000.0 + (1000.0* 0.5 * 0.5) = 1250.00
+		//			Exemplo 2: 1000.0 + (1000.0* 0.5 * 10) = 6000.00
+		this.role = getPossibleRole(r.nextInt(possibleRoles.size())); //obtem um papel aleatoriamente
+		
+		return this;
 	}
 
 	public void setActivity(Activity act) {
