@@ -8,10 +8,10 @@ public class Stage {
 	private String name;
 	private int workDays;
 	private boolean complete;
-	private List<Activity> activities = new ArrayList<Activity>();
+	private List<Activity> activities = new ArrayList<>();
 	
 	public Stage(String stageName) {
-		// TODO Auto-generated constructor stub
+        name = stageName;
 	}
 
 	public boolean endDay() {
@@ -40,10 +40,6 @@ public class Stage {
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public int getWorkDays() {
