@@ -98,8 +98,17 @@ public class Project {
 		return null;
 	}
 
-	public boolean addDevOnActivity(int ActivityID, int DevID) {
-		return false;
+	public boolean addDevOnActivity(int activityID, int devID) {
+        Activity a;
+        Dev d;
+        try {
+            a = activities.get(activityID);
+            d = devs.get(devID);
+        } catch (Exception e){
+            return false;
+        }
+
+        return a.addDev(d);
 	}
 
 	public boolean rmDevOnActivity(int activityID, int devID) {
@@ -193,9 +202,9 @@ public class Project {
 	}
 
 	public List<Computer> getIdleComputers() {
-		List<Computer> idleComputers = new ArrayList<Computer>();
+		List<Computer> idleComputers = new ArrayList<>();
 		for (Computer c: computers){
-			if(!c.getActivity().equals(null)) {
+			if(c.getActivity() == null) {
 				idleComputers.add(c);
 			}
 		}

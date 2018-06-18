@@ -137,7 +137,7 @@ public class User {
                     printActivityDevs(actID);
                     System.out.println("Type the ID of the developer");
                     devID = scanner.nextInt();
-                    project.addDevOnActivity(actID, devID);
+                    project.rmDevOnActivity(actID, devID);
                     break;
 
                 case 3:

@@ -46,9 +46,11 @@ public class Dev {
 
 	public boolean endDay() {
 		boolean isWorking = status.isAvailable();
+        boolean completedAct = false;
 		boolean roll = false;
+		
 		if(isWorking){
-			activity.work(productivity);
+            completedAct = activity.work(productivity);
 			roll = status.roll();
 		}
 

@@ -27,6 +27,7 @@ public class Activity {
 		}
 
 		devs.add(dev);
+		dev.setActivity(this);
 		return true;
 	}
 
@@ -46,8 +47,7 @@ public class Activity {
 	}
 
 	public int getComputerNo() {
-		int computerNo =  computers.size();
-		return computerNo;
+		return computers.size();
 	}
 
 	public void setComputers(int qnt, List<Computer> idleComp) {
