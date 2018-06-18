@@ -17,22 +17,20 @@ public class Computer {
 		activity = null;
 	}
 
-	/*public ~Computer() {
-
-	}*/
+    public void destroy(){
+        if (activity != null){
+            boolean removed = activity.rmComputer(this);
+            if(!removed){
+                System.err.print("Associated computer->activity not found in activity->computer");
+            }
+        }
+    }
 
 	public boolean endDay() {
 		return status.roll();
 	}
 
-	public void revokeOwnership(){
-		if (activity != null){
-			boolean removed = activity.rmComputer(this);
-			if(!removed){
-				System.err.print("Associated computer->activity not found in activity->computer");
-			}
-		}
-	}
+
 
 	public void setActivity(Activity a) {
 		activity = a;

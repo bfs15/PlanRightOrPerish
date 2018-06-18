@@ -50,7 +50,7 @@ public class User {
         }
 
         System.out.println("What will be the project budget?");
-        project.estabilishExpenses(scanner.nextInt());
+        project.establishExpenses(scanner.nextInt());
 
         // start game
         boolean gameRunning = true;

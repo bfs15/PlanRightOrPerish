@@ -7,6 +7,7 @@ public class Activity {
 
 	private double cost;
 	private double workDone = 0;
+	private int computerNo;
 	private String type;
 	private String name;
 	private List<Dev> devs =  new ArrayList<Dev>();
@@ -50,14 +51,20 @@ public class Activity {
 		return computers.size();
 	}
 
-	public void setComputers(int qnt, List<Computer> idleComp) {
+	public boolean setComputers(int qnt, List<Computer> idleComp) {
+		if(qnt <= computerNo)
+			return false;
+
 		for(int i = 0; i <= qnt; i++){
-			addComputer(idleComp.get(i));
+			boolean succ = addComputer(idleComp.get(i));
+			if( ! succ)
+				return false;
 		}
+		return true;
 	}
 
 	public void rmComputers(int qnt) {
-		for(int i = 0;i < qnt; ++i) {
+		for(int i = 0; i < qnt; ++i) {
 			rmComputerAny();
 		}
 	}
@@ -70,14 +77,18 @@ public class Activity {
 			computers.remove(c);
 		}
 		catch (Exception e){
-			e.printStackTrace();
+			System.out.print("Couldn't remove computer");
 		}
 	}
 
-	public void addComputer(Computer c) {
+	public boolean addComputer(Computer c) {
+		if(computers.size() < computerNo)
+			return false;
+
 		computers.add(c);
 		// associate computer to activity
 		c.setActivity(this);
+		return true;
 	}
 
 	public double getCost() {
@@ -115,9 +126,4 @@ public class Activity {
 	public List<Computer> getComputers() {
 		return computers;
 	}
-
-	public void setComputers(List<Computer> computers) {
-		this.computers = computers;
-	}
-
 }

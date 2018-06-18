@@ -7,7 +7,7 @@ public class Stage {
 
 	private String name;
 	private int workDays;
-	private boolean complete;
+	private boolean complete = false;
 	private List<Activity> activities = new ArrayList<>();
 	
 	public Stage(String stageName) {
@@ -15,8 +15,7 @@ public class Stage {
 	}
 
 	public boolean endDay() {
-		var complete = calcComplete();
-		return complete;
+		return calcComplete();
 	}
 
 	public boolean calcComplete() {
@@ -26,6 +25,7 @@ public class Stage {
 			}
 		}
 
+        complete = true;
 		return true;
 	}
 
@@ -48,10 +48,6 @@ public class Stage {
 
 	public void setWorkDays(int workDays) {
 		this.workDays = workDays;
-	}
-
-	public boolean isComplete() {
-		return complete;
 	}
 
 	public void setComplete(boolean complete) {

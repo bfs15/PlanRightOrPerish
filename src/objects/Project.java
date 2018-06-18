@@ -22,7 +22,7 @@ public class Project {
 	private List<Activity> activities =  new ArrayList<>();
 	private List<Dev> dailyDevs = new ArrayList<>();
 
-	public boolean estabilishExpenses(double money) {
+	public boolean establishExpenses(double money) {
 		if(money <= 0){
 			return false;
 		}
@@ -128,19 +128,18 @@ public class Project {
 		for (int i=0;i<quantity;++i) {
 			computers.add(new Computer());
 			money -= Computer.getPrice();
-
 		}
 		return money;
 	}
 
 	public double rmComputer(int quantity) {
-		while (quantity != 0 ) {
-			Computer c = computers.get(0);
+		while (quantity > 0 ) {
+		    int idx = computers.size()-1;
+			Computer c = computers.get(idx);
 			money += Computer.getPricePenalized();
-			Activity a = c.getActivity();
-			if (!a.equals(null)){
-				a.rmComputer(c);
-			}
+            c.destroy();
+            computers.remove(idx);
+
 			--quantity;
 		}
 		return 0;
@@ -189,8 +188,11 @@ public class Project {
 				qnt = qnt - computerNo; //adicionar o delta
 				List<Computer> idleComp = getIdleComputers(); //obtem lista de todos os idle computers
 				if(idleComp.size() >= qnt) { //se existem idle computers o suficiente
-					a.setComputers(qnt,idleComp);
-					success = qnt;
+                    success = qnt;
+					boolean succ = a.setComputers(qnt,idleComp);
+					if( ! succ){
+                        success = 0;
+                    }
 				}
 			}
 		}
@@ -317,16 +319,14 @@ public class Project {
 		// TODO Colocar no diagrama
 		boolean ReadingActivities = false;
 		int cont = 0;
-		String line = "";
-		String s = "";
+		String line;
 		Activity act = null ;
 		BufferedReader br = new BufferedReader(new FileReader(string));
 		try {
 			StringBuilder sb = new StringBuilder();
-		    line =br.readLine();
+		    line = br.readLine();
 
 		    while (line != null) {
-		    	//System.out.println(line);
 		        if(!line.equals("Activities:")){
 		        	this.description = sb.toString();
 		        	sb.delete(0, sb.length()-1);
@@ -340,7 +340,6 @@ public class Project {
 
 
 		        if(ReadingActivities){
-
 		        	switch((cont%4)){
 			        	case 0:
 			        		act = new Activity();
@@ -365,8 +364,6 @@ public class Project {
 		        }
 
 		    }
-		    s = sb.toString();
-
 		} finally {
 		    br.close();
 		}
