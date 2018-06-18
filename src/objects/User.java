@@ -205,7 +205,12 @@ public class User {
                 case 2:
                     System.out.println("Type the ID of the developer to dismiss");
                     devID = scanner.nextInt();
-                    project.rmDev(devID);
+                    boolean succ = project.rmDev(devID);
+                    if(succ){
+                        System.out.println("Dev " + devID + " removed");
+                    } else {
+                        System.out.println("Dev " + devID + " not found");
+                    }
                     break;
 
                 default:

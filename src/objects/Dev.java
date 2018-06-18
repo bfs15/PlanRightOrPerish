@@ -11,9 +11,11 @@ public class Dev {
 	private Activity activity = null;
 	private Event status = new Event();
 
-//	public Dev() {
-//
-//	}
+	public void destroy() {
+		if(activity != null){
+			activity.rmDev(this);
+		}
+	}
 
 	public boolean endDay() {
 		boolean isWorking = status.isAvailable();

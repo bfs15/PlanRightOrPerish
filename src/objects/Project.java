@@ -93,7 +93,17 @@ public class Project {
 	}
 
 	public boolean rmDev(int devID) {
-		return false;
+		Dev d;
+		try {
+			d = devs.get(devID);
+		}
+		catch (Exception e){
+			return false;
+		}
+		devs.remove(devID);
+		d.destroy();
+
+		return true;
 	}
 
 	public List<Dev> getIdleDevs() {
