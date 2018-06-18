@@ -135,9 +135,9 @@ public class User {
 
                 case 3:
                     printComputerUsage();
-                    System.out.println("Type the set quantity you want for this activity");
-                    devID = scanner.nextInt();
-                    project.addDevOnActivity(actID, devID);
+                    System.out.println("Type the set quantity of computers you want for this activity");
+                    int computerQnt = scanner.nextInt();
+                    project.setComputer(actID, computerQnt);
                     break;
                 default:
                     System.out.println("Invalid action");
