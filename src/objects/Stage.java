@@ -29,6 +29,15 @@ public class Stage {
 		return true;
 	}
 
+	public boolean addActivity(Activity a){
+        if(activities.indexOf(a) != -1){
+            return false;
+        }
+
+        activities.add(a);
+	    return true;
+    }
+
 	public String getName() {
 		return name;
 	}

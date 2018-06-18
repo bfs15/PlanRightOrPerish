@@ -15,6 +15,7 @@ public class User {
             System.out.println("Wrong args\nUsage: java program projectFilename");
             System.exit(0);
         }
+
         try {
             project.openFile(args[0]);
         } catch (Exception e) {
@@ -34,16 +35,22 @@ public class User {
 
             actID = readAddActivityToStage(stageName);
             while (actID > -1) {
-                project.addActivity(stageID, actID);
+                boolean succ = project.addActivity(stageID, actID);
+                if( ! succ){
+                    System.out.println("Activity couldn't be added to stage");
+                }
 
                 actID = readAddActivityToStage(stageName);
             }
 
-            System.out.println("Type how many work days this stage will have");
+            System.out.println("How many work days this stage will have?");
             project.setSchedule(stageID, scanner.nextInt());
 
             stageName = readStageName();
         }
+
+        System.out.println("What will be the project budget?");
+        project.estabilishExpenses(scanner.nextInt());
 
         // start game
         boolean gameRunning = true;
@@ -194,7 +201,8 @@ public class User {
                     // Print daily devs
                     List<Dev> dailyDevs = project.getDailyDevs();
                     for(Dev d : dailyDevs){
-                        print(d);
+                        if( ! d.getName().equals(""))
+                            print(d);
                     }
 
                     System.out.println("Type the ID of the developer to hire");

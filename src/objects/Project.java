@@ -139,15 +139,13 @@ public class Project {
 	}
 
 	public Activity getActivity(int ID) {
-		Activity a;
+		Activity a = null;
 		try {
 			a = activities.get(ID);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			a = null;
 		}
-
 
 		return a;
 	}
@@ -362,14 +360,21 @@ public class Project {
 	}
 
 	public int newStage(String stageName) {
-		// TODO Auto-generated method stub
 		Stage s = new Stage(stageName);
 		stages.add(s);
 		return stages.size()-1;
 	}
 
-	public void addActivity(int stageID, int actID) {
-		// TODO Auto-generated method stub
+	public boolean addActivity(int stageID, int actID) {
+        Stage s;
+        Activity a;
+	    try {
+            s = stages.get(stageID);
+            a = activities.get(actID);
+        } catch (Exception e){
+	        return false;
+        }
 
+	    return s.addActivity(a);
 	}
 }
