@@ -14,13 +14,10 @@ public class Stage {
 		// TODO Auto-generated constructor stub
 	}
 
-
-
-	public void endDay() {
-
+	public boolean endDay() {
+		var complete = calcComplete();
+		return complete;
 	}
-
-
 
 	public boolean calcComplete() {
 		return false;

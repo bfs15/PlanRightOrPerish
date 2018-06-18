@@ -15,26 +15,39 @@ public class Project {
 	private double money;
 	private int day = 0;
 	private Stage currentStage;
-	private List<Stage> stages = new ArrayList<Stage>();
-	private List<Dev> devs =  new ArrayList<Dev>();
-	private List<Computer> computers =  new ArrayList<Computer>();;
-	private List<Activity> activities =  new ArrayList<Activity>();;
-	private List<Dev> dailyDevs = new ArrayList<Dev>();
-	
-	public void setLifeCycleModel() {
-
-	}
+	private List<Stage> stages = new ArrayList<>();
+	private List<Dev> devs =  new ArrayList<>();
+	private List<Computer> computers =  new ArrayList<>();
+	private List<Activity> activities =  new ArrayList<>();
+	private List<Dev> dailyDevs = new ArrayList<>();
 
 	public boolean estabilishExpenses(double money) {
-		return false;
+		if(money <= 0){
+			return false;
+		}
+		this.budget = money;
+		this.money = money;
+		return true;
 	}
 
-	public boolean setSchedule(int stageID, int workDays) {
-		return false;
+	public void setSchedule(int stageID, int workDays) {
+		try{
+			Stage s = getStage(stageID);
+			s.setWorkDays(workDays);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public boolean nextStage() {
-		return false;
+		int idx = stages.indexOf(currentStage);
+
+		if (idx < 0 || idx+1 == stages.size())
+			return false;
+
+		currentStage = stages.get(idx + 1);
+		return true;
 	}
 
 	public Stage getStage(int ID) {
@@ -45,19 +58,49 @@ public class Project {
 
 	}
 
-	public void endDay() {
-
+	public boolean endDay() {
+		for(Dev d : devs){
+			d.endDay();
+			money -= d.getSalary();
+		}
+		for(Computer c : computers){
+			c.endDay();
+		}
+		var complete = currentStage.endDay();
+		if(complete){
+			nextStage();
+		} else if (currentStage.getWorkDays() == 0){
+			penalty();
+		}
+		return complete;
 	}
 
-	public boolean addDailyDev() {
-		return false;
+	public boolean addDailyDev(Dev dev) {
+		boolean success = false;
+		try {
+			success = this.dailyDevs.add(dev);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return success;
 	}
 
 	public boolean addDev(int ID) {
-		return false;
+		boolean success = false;
+		try {
+			Dev dev = this.dailyDevs.get(ID);
+			success = devs.add(dev);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+
 	}
 
-	public boolean rmDev(int DevID) {
+	public boolean rmDev(int devID) {
 		return false;
 	}
 
@@ -74,15 +117,39 @@ public class Project {
 	}
 
 	public double addComputer(int quantity) {
-		return 0;
+		for (int i=0;i<quantity;++i) {
+			computers.add(new Computer());
+			money -= Computer.getPrice();
+
+		}
+		return money;
 	}
 
 	public double rmComputer(int quantity) {
+		while (quantity != 0 ) {
+			Computer c = computers.get(0);
+			money += Computer.getPricePenalized();
+			Activity a = c.getActivity();
+			if (!a.equals(null)){
+				a.rmComputer(c);
+			}
+			--quantity;
+		}
 		return 0;
 	}
 
 	public Activity getActivity(int ID) {
-		return null;
+		Activity a;
+		try {
+			a = activities.get(ID);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			a = null;
+		}
+
+
+		return a;
 	}
 
 	public Dev getDev(int ID) {
@@ -93,12 +160,41 @@ public class Project {
 		return null;
 	}
 
-	public int setComputer(int actID, int qnt) {
-		return 0;
+	public int setComputer(int actID, int qnt) { //actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
+		int success = 0;
+		try {
+			Activity a  = getActivity(actID);
+			int computerNo = a.getComputerNo();
+			if(computerNo > qnt) {
+				qnt = computerNo - qnt; //remover o delta
+				a.rmComputers(qnt);
+				success = -qnt;
+			}
+
+			else if (computerNo < qnt) {
+				qnt = qnt - computerNo; //adicionar o delta
+				List<Computer> idleComp = getIdleComputers(); //obtem lista de todos os idle computers
+				if(idleComp.size() >= qnt) { //se existem idle computers o suficiente
+					a.setComputers(qnt,idleComp);
+					success = qnt;
+				}
+			}
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return success;
 	}
 
 	public List<Computer> getIdleComputers() {
-		return null;
+		List<Computer> idleComputers = new ArrayList<Computer>();
+		for (Computer c: computers){
+			if(!c.getActivity().equals(null)) {
+				idleComputers.add(c);
+			}
+		}
+		return idleComputers;
 	}
 
 	public String getDescription() {
@@ -181,7 +277,24 @@ public class Project {
 		this.activities = activities;
 	}
 
+
 	public List<Dev> getDailyDevs() {
+		if(dailyDevs.size() == 0){
+			generateDailyDevs();
+		}
+		return dailyDevs;
+	}
+
+	public List<Dev> generateDailyDevs() {
+		int dailyDevsNo = 10;
+
+		List<Dev> dailyDevs = new ArrayList<>();
+		for (int i = 0; i < dailyDevsNo ; ++i) {
+			Dev dev = new Dev();
+			dev.rollDev();
+			addDailyDev(dev);
+		}
+
 		return dailyDevs;
 	}
 
@@ -198,7 +311,7 @@ public class Project {
 		Activity act = null ;
 		BufferedReader br = new BufferedReader(new FileReader(string));
 		try {
-		    StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 		    line =br.readLine();
 
 		    while (line != null) {
@@ -213,14 +326,14 @@ public class Project {
 			        sb.append(line);
 			        sb.append(System.lineSeparator());
 		        }
-		        
+
 
 		        if(ReadingActivities){
-		        	
+
 		        	switch((cont%4)){
 			        	case 0:
 			        		act = new Activity();
-			        		act.setName(line); 
+			        		act.setName(line);
 			        		++cont;
 			        		break;
 		        		case 1:
@@ -235,32 +348,31 @@ public class Project {
 		        			activities.add(act);
 		        			++cont;
 		        			break;
-		        		default:			
+		        		default:
 		        			break;
 		        	}
 		        }
 
 		    }
 		    s = sb.toString();
-		    
+
 		} finally {
 		    br.close();
 		}
-		//nome
-		//descrição
-		//atividades
-		
+		// nome
+		// descrição
+		// atividades
 	}
 
 	public int newStage(String stageName) {
 		// TODO Auto-generated method stub
 		Stage s = new Stage(stageName);
 		stages.add(s);
-		return stages.size()-1;		
+		return stages.size()-1;
 	}
 
 	public void addActivity(int stageID, int actID) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

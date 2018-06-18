@@ -9,9 +9,12 @@ public class Computer {
 	public static double getPrice() {
 		return price;
 	}
-
+	
+	public static double getPricePenalized() {
+		return getPrice() * 0.75;
+	}
 	public Computer() {
-
+		activity = null;
 	}
 
 	/*public ~Computer() {
@@ -19,19 +22,19 @@ public class Computer {
 	}*/
 
 	public void endDay() {
-
+		status.roll();
 	}
 
 	public void setActivity(Activity a) {
 		activity = a;
 	}
-	
+
 	public Activity getActivity() {
 		return activity;
 	}
 
 	public void unsetActivity() {
-
+		activity = null;
 	}
 
 	public Event getStatus() {
@@ -41,5 +44,6 @@ public class Computer {
 	public void setStatus(Event status) {
 		this.status = status;
 	}
+
 
 }

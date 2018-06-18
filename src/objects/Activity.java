@@ -10,13 +10,21 @@ public class Activity {
 	private String name;
 	private List<Dev> devs =  new ArrayList<Dev>();
 	private List<Computer> computers =  new ArrayList<Computer>();;
-	
+
 	public void work(double productivity) {
 
 	}
 
 	public boolean addDev(Dev dev) {
-		return false;
+		boolean success = false;
+		try {
+			success = devs.add(dev);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+		
 	}
 
 	public boolean rmDev(Dev d) {
@@ -28,23 +36,36 @@ public class Activity {
 	}
 
 	public int getComputerNo() {
-		return 0;
+		int computerNo =  computers.size();
+		return computerNo;
 	}
 
-	public void setComputers(int qnt, Computer idleComp) {
+	public void setComputers(int qnt, List<Computer> idleComp) {
+		for(Computer c : idleComp) { //percorre lista de idle computers
+			addComputer(c);//relaciona computer a activity
+		}
 
 	}
 
 	public void rmComputers(int qnt) {
-
+		for(int i = 0;i < qnt; ++i) {
+			rmComputerAny();
+		}
 	}
 
 	public void rmComputerAny() {
-
+		try {
+			Computer c = computers.get(0);
+			c.unsetActivity();
+			computers.remove(c);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public void addComputer(Computer c) {
-
+		c.setActivity(this); //relaciona activity a computer
 	}
 
 	public double getCost() {
