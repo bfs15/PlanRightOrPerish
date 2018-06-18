@@ -75,18 +75,6 @@ public class Project {
 		return complete;
 	}
 
-	public boolean addDailyDev(Dev dev) {
-		boolean success = false;
-		try {
-			success = this.dailyDevs.add(dev);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return success;
-	}
-
 	public boolean addDev(int ID) {
 		boolean success = false;
 		try {
@@ -285,17 +273,14 @@ public class Project {
 		return dailyDevs;
 	}
 
-	public List<Dev> generateDailyDevs() {
-		int dailyDevsNo = 10;
+	public void generateDailyDevs() {
+		final int DAILY_DEVS_NO = 10;
 
-		List<Dev> dailyDevs = new ArrayList<>();
-		for (int i = 0; i < dailyDevsNo ; ++i) {
+		for (int i = 0; i < DAILY_DEVS_NO ; ++i) {
 			Dev dev = new Dev();
 			dev.rollDev();
-			addDailyDev(dev);
+			this.dailyDevs.add(dev);
 		}
-
-		return dailyDevs;
 	}
 
 	public void setDailyDevs(List<Dev> dailyDevs) {
