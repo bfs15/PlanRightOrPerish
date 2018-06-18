@@ -21,26 +21,7 @@ public class Project {
 	private List<Computer> computers =  new ArrayList<>();
 	private List<Activity> activities =  new ArrayList<>();
 	private List<Dev> dailyDevs = new ArrayList<>();
-	
-	private static List<String> nameList = new ArrayList<>();
-	
-	public static void readNames(){
-		
-        String fileName = "database/temp.txt";
-        String line = null;
 
-        try {
-            FileReader fileReader =  new FileReader(fileName);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while((line = bufferedReader.readLine()) != null) {
-                nameList.add(line);
-            }   
-            bufferedReader.close();         
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-		
-	}
 	public boolean estabilishExpenses(double money) {
 		if(money <= 0){
 			return false;
@@ -80,7 +61,7 @@ public class Project {
 
 	public boolean endDay() {
 		for(Dev d : devs){
-			d.endDay();
+			boolean event = d.endDay();
 			money -= d.getSalary();
 		}
 		for(Computer c : computers){
@@ -103,6 +84,7 @@ public class Project {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 		return success;
 
@@ -120,8 +102,17 @@ public class Project {
 		return false;
 	}
 
-	public boolean rmDevOnActivity(int ActivityID, int DevID) {
-		return false;
+	public boolean rmDevOnActivity(int activityID, int devID) {
+        Activity a;
+        Dev d;
+        try {
+            a = activities.get(activityID);
+            d = devs.get(devID);
+        } catch (Exception e){
+            return false;
+        }
+
+        return a.rmDev(d);
 	}
 
 	public double addComputer(int quantity) {
@@ -163,7 +154,15 @@ public class Project {
 	}
 
 	public List<Dev> getActivityDevs(int actID) {
-		return null;
+	    Activity act;
+        try {
+            act = activities.get(actID);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+		return act.getDevs();
 	}
 
 	public int setComputer(int actID, int qnt) { //actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade

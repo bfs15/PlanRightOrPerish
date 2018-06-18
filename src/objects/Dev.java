@@ -1,5 +1,9 @@
 package objects;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Dev {
@@ -10,7 +14,30 @@ public class Dev {
 	private String role = "";
 	private Activity activity = null;
 	private Event status = new Event();
-	
+
+    private static List<String> nameList = new ArrayList<>();
+
+    //static initializer
+    static {
+        readNames();
+    }
+
+    public static void readNames(){
+        String fileName = "database/NameDB.txt";
+        String line;
+
+        try {
+            FileReader fileReader =  new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            while((line = bufferedReader.readLine()) != null) {
+                nameList.add(line);
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 	public void destroy() {
 		if(activity != null){
 			activity.rmDev(this);
@@ -35,19 +62,28 @@ public class Dev {
 	public void rollDev() {
 		Random r = new Random();
 		// obtem um nome aleatoriamente
-		this.name = getPossibleName(r.nextInt(possibleNames.size()));
+		this.name = nameList.get(r.nextInt(nameList.size()));
 		// (0,1) * valor limitante
 		double prodMin = 100;
 		double prodMax = 400 - prodMin;
 		this.productivity  = r.nextDouble() * prodMax + prodMin;
+
 		// salarioBase +  (salarioBase * gananciaDoDev * produtividade)
 		// salario varia de acordo com a produtividade, mas sempre dentro de um maximo
-		this.salary = MIN_SALARY + (MIN_SALARY * r.nextDouble() *  this.productivity);
-		// ex 1: 1000.0 + (1000.0* 0.5 * 0.5) = 1250.00
-		// ex 2: 1000.0 + (1000.0* 0.5 * 10) = 6000.00
+		this.salary = productivity*2;
+		// salary is between (0.8, 1.2)% of dev deserving salary
+        double noiseMin = 0.8;
+        double noiseMax = 1.2 - noiseMin;
+		double noiseMult = r.nextDouble()*noiseMax + noiseMin;
+		salary *= noiseMult;
 
-		//obtem um papel aleatoriamente
-		this.role = getPossibleRole(r.nextInt(possibleRoles.size()));
+		// obtem um papel aleatoriamente
+        ArrayList<String> possibleRoles = new ArrayList<>();
+        possibleRoles.add("A");
+        possibleRoles.add("B");
+        possibleRoles.add("C");
+        possibleRoles.add("D");
+		this.role = possibleRoles.get(r.nextInt(possibleRoles.size()));
 	}
 
 	public void setActivity(Activity act) {
@@ -59,43 +95,23 @@ public class Dev {
 	}
 
 	public void unsetActivity() {
-
+        activity = null;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public double getProductivity() {
 		return productivity;
 	}
 
-	public void setProductivity(double productivity) {
-		this.productivity = productivity;
-	}
-
-	public int getRole() {
+	public String getRole() {
 		return role;
-	}
-
-	public void setRole(int role) {
-		this.role = role;
-	}
-
-	public void setSalary(double salary) {
-		this.salary = salary;
 	}
 
 	public Event getStatus() {
 		return status;
-	}
-
-	public void setStatus(Event status) {
-		this.status = status;
 	}
 
 }

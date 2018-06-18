@@ -22,19 +22,23 @@ public class Activity {
 	}
 
 	public boolean addDev(Dev dev) {
-		boolean success = false;
-		try {
-			success = devs.add(dev);
+		if(devs.indexOf(dev) != -1){
+			return false;
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return success;
-		
+
+		devs.add(dev);
+		return true;
 	}
 
 	public boolean rmDev(Dev d) {
-		return false;
+		int idx;
+		if((idx = devs.indexOf(d)) == -1){
+			return false;
+		}
+
+		devs.remove(idx);
+		d.unsetActivity();
+		return true;
 	}
 
 	public boolean rmComputer(Computer c) {
