@@ -60,7 +60,7 @@ public class Project {
 
 	public boolean endDay() {
 		for(Dev d : devs){
-			d.endDay();
+			boolean roll = d.endDay();
 			money -= d.getSalary();
 		}
 		for(Computer c : computers){
@@ -72,14 +72,16 @@ public class Project {
 		} else if (currentStage.getWorkDays() == 0){
 			penalty();
 		}
-		return complete;
+
+		return currentStage == null;
 	}
 
 	public boolean addDev(int ID) {
 		boolean success = false;
 		try {
-			Dev dev = this.dailyDevs.get(ID);
+			Dev dev = dailyDevs.get(ID);
 			success = devs.add(dev);
+			dailyDevs.set(ID, new Dev());
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -6,13 +6,19 @@ import java.util.List;
 public class Activity {
 
 	private double cost;
+	private double workDone = 0;
 	private String type;
 	private String name;
 	private List<Dev> devs =  new ArrayList<Dev>();
 	private List<Computer> computers =  new ArrayList<Computer>();;
 
-	public void work(double productivity) {
+	public boolean work(double productivity) {
+		workDone += productivity;
+		return workDone >= cost;
+	}
 
+	public boolean isComplete() {
+		return workDone >= cost;
 	}
 
 	public boolean addDev(Dev dev) {

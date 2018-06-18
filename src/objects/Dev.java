@@ -4,19 +4,26 @@ import java.util.Random;
 
 public class Dev {
 
-	private String name;
-	private double productivity;
-	private double salary;
-	private int role;
-	private Activity activity;
-	private Event status;
-	
-	public Dev() {
-		
-	}
+	private String name = "";
+	private double productivity = 0;
+	private double salary = 0;
+	private String role = "";
+	private Activity activity = null;
+	private Event status = new Event();
 
-	public void endDay() {
+//	public Dev() {
+//
+//	}
 
+	public boolean endDay() {
+		boolean isWorking = status.isAvailable();
+		boolean roll = false;
+		if(isWorking){
+			activity.work(productivity);
+			roll = status.roll();
+		}
+
+		return roll;
 	}
 
 	public double getSalary() {

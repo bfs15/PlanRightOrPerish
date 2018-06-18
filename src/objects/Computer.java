@@ -21,8 +21,8 @@ public class Computer {
 
 	}*/
 
-	public void endDay() {
-		status.roll();
+	public boolean endDay() {
+		return status.roll();
 	}
 
 	public void setActivity(Activity a) {

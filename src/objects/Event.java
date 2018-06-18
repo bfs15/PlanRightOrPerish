@@ -1,5 +1,7 @@
 package objects;
 
+import java.util.Random;
+
 public class Event {
 
 	private int type;
@@ -11,6 +13,15 @@ public class Event {
 	}
 
 	public boolean roll() {
+		Random r = new Random();
+		double randNum  = r.nextDouble();
+		if(randNum < 0.1){
+			type = 0;
+			duration = r.nextInt(3);
+			description = "is playing a game";
+			return true;
+		}
+
 		return false;
 	}
 

@@ -20,7 +20,13 @@ public class Stage {
 	}
 
 	public boolean calcComplete() {
-		return false;
+		for(Activity a : activities){
+			if(!a.isComplete()){
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public boolean setSchedule(int workDays) {
