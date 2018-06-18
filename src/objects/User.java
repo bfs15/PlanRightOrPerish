@@ -236,6 +236,7 @@ public class User {
 
     private static void menuComputers(){
         int choice;
+        double money;
 
         menuComputersPrint();
         choice = choose();
@@ -245,14 +246,14 @@ public class User {
                 case 1:
                     System.out.println("Type the quantity to buy");
                     quantity = scanner.nextInt();
-                    double money = project.addComputer(quantity);
+                    money = project.addComputer(quantity);
                     System.out.println("Project money: " + money);
                     break;
 
                 case 2:
                     System.out.println("Type the quantity to sell");
                     quantity = scanner.nextInt();
-                    double money = project.rmComputer(quantity);
+                    money = project.rmComputer(quantity);
                     System.out.println("Project money: " + money);
                     break;
 

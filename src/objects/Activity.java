@@ -47,10 +47,9 @@ public class Activity {
 	}
 
 	public void setComputers(int qnt, List<Computer> idleComp) {
-		for(Computer c : idleComp) { //percorre lista de idle computers
-			addComputer(c);//relaciona computer a activity
+		for(int i = 0; i <= qnt; i++){
+			addComputer(idleComp.get(i));
 		}
-
 	}
 
 	public void rmComputers(int qnt) {
@@ -61,7 +60,8 @@ public class Activity {
 
 	public void rmComputerAny() {
 		try {
-			Computer c = computers.get(0);
+			int lastIdx = computers.size()-1;
+			Computer c = computers.get(lastIdx);
 			c.unsetActivity();
 			computers.remove(c);
 		}
@@ -71,7 +71,9 @@ public class Activity {
 	}
 
 	public void addComputer(Computer c) {
-		c.setActivity(this); //relaciona activity a computer
+		computers.add(c);
+		// associate computer to activity
+		c.setActivity(this);
 	}
 
 	public double getCost() {

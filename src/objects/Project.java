@@ -150,23 +150,23 @@ public class Project {
 		return null;
 	}
 
-	public int setComputer(int actID, int qnt) { //actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
-		int success = 0;
+	//actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
+	public int setComputer(int actID, int qnt) {
+		int delta = 0;
 		try {
 			Activity a  = getActivity(actID);
+
 			int computerNo = a.getComputerNo();
 			if(computerNo > qnt) {
-				qnt = computerNo - qnt; //remover o delta
-				a.rmComputers(qnt);
-				success = -qnt;
+				delta = computerNo - qnt; //remover o delta
+				a.rmComputers(delta);
+				delta = -delta;
 			}
-
 			else if (computerNo < qnt) {
-				qnt = qnt - computerNo; //adicionar o delta
+				delta = qnt - computerNo; //adicionar o delta
 				List<Computer> idleComp = getIdleComputers(); //obtem lista de todos os idle computers
-				if(idleComp.size() >= qnt) { //se existem idle computers o suficiente
-					a.setComputers(qnt,idleComp);
-					success = qnt;
+				if(idleComp.size() >= delta) { //se existem idle computers o suficiente
+					a.setComputers(delta, idleComp);
 				}
 			}
 		}
@@ -174,7 +174,7 @@ public class Project {
 			e.printStackTrace();
 		}
 
-		return success;
+		return delta;
 	}
 
 	public List<Computer> getIdleComputers() {
