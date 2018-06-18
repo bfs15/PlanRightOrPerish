@@ -25,6 +25,15 @@ public class Computer {
 		return status.roll();
 	}
 
+	public void revokeOwnership(){
+		if (activity != null)){
+			boolean removed = activity.rmComputer(this));
+			if(!removed){
+				System.err.print("Associated computer->activity not found in activity->computer");
+			}
+		}
+	}
+
 	public void setActivity(Activity a) {
 		activity = a;
 	}

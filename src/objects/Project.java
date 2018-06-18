@@ -112,22 +112,20 @@ public class Project {
 		for (int i=0;i<quantity;++i) {
 			computers.add(new Computer());
 			money -= Computer.getPrice();
-
 		}
+
 		return money;
 	}
 
 	public double rmComputer(int quantity) {
-		while (quantity != 0 ) {
+		while (quantity > 0 ) {
 			Computer c = computers.get(0);
 			money += Computer.getPricePenalized();
-			Activity a = c.getActivity();
-			if (!a.equals(null)){
-				a.rmComputer(c);
-			}
+			c.revokeOwnership();
 			--quantity;
 		}
-		return 0;
+
+		return money;
 	}
 
 	public Activity getActivity(int ID) {

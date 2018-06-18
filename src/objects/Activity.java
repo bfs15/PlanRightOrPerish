@@ -38,7 +38,7 @@ public class Activity {
 	}
 
 	public boolean rmComputer(Computer c) {
-		return false;
+		return computers.remove(c);
 	}
 
 	public int getComputerNo() {

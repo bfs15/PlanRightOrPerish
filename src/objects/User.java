@@ -245,13 +245,15 @@ public class User {
                 case 1:
                     System.out.println("Type the quantity to buy");
                     quantity = scanner.nextInt();
-                    project.addComputer(quantity);
+                    double money = project.addComputer(quantity);
+                    System.out.println("Project money: " + money);
                     break;
 
                 case 2:
                     System.out.println("Type the quantity to sell");
                     quantity = scanner.nextInt();
-                    project.rmComputer(quantity);
+                    double money = project.rmComputer(quantity);
+                    System.out.println("Project money: " + money);
                     break;
 
                 default:
