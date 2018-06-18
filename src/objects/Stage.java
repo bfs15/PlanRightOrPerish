@@ -29,10 +29,6 @@ public class Stage {
 		return true;
 	}
 
-	public boolean setSchedule(int workDays) {
-		return false;
-	}
-
 	public String getName() {
 		return name;
 	}

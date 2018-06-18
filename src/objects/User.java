@@ -27,18 +27,20 @@ public class User {
         String stageName;
 
         stageName = readStageName();
-        while(stageName.equals("end")) {
+        while(!stageName.equals("end")) {
 
             int stageID = project.newStage(stageName);
             int actID;
 
             actID = readAddActivityToStage(stageName);
-            while (actID > 0) {
+            while (actID > -1) {
                 project.addActivity(stageID, actID);
 
                 actID = readAddActivityToStage(stageName);
-
             }
+
+            System.out.println("Type how many work days this stage will have");
+            project.setSchedule(stageID, scanner.nextInt());
 
             stageName = readStageName();
         }
@@ -261,7 +263,6 @@ public class User {
             choice = choose();
         }
     }
-    //TODO tirar todas as funções
 
     private static void menuComputersPrint(){
         printComputerUsage();

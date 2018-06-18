@@ -30,14 +30,16 @@ public class Project {
 		return true;
 	}
 
-	public void setSchedule(int stageID, int workDays) {
+	public boolean setSchedule(int stageID, int workDays) {
 		try{
 			Stage s = getStage(stageID);
 			s.setWorkDays(workDays);
 		}
 		catch (Exception e){
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	public boolean nextStage() {
