@@ -15,7 +15,11 @@ public class User {
             System.out.println("Wrong args\nUsage: java program projectFilename");
             System.exit(0);
         }
-        project.openFile(args[0]);
+        try {
+            project.openFile(args[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Print activities so user can make stages
         printActivities();
@@ -257,11 +261,12 @@ public class User {
             choice = choose();
         }
     }
+    //TODO tirar todas as funções
 
     private static void menuComputersPrint(){
         printComputerUsage();
         System.out.println("price per computer: " + Computer.getPrice());
-        System.out.println("sell value: " + Computer.getSellPrice());
+        System.out.println("sell value: " + Computer.getPricePenalized());
         System.out.println("1: Buy");
         System.out.println("2: Sell");
         System.out.println("0: Exit");

@@ -10,11 +10,14 @@ public class Stage {
 	private boolean complete;
 	private List<Activity> activities = new ArrayList<Activity>();
 	
-	public void endDay() {
-
+	public Stage(String stageName) {
+		// TODO Auto-generated constructor stub
 	}
 
-
+	public boolean endDay() {
+		var complete = calcComplete();
+		return complete;
+	}
 
 	public boolean calcComplete() {
 		return false;
@@ -36,17 +39,8 @@ public class Stage {
 		return workDays;
 	}
 
-	public boolean setWorkDays(int workDays) {
-		boolean succ = false;
-		try {
-			this.workDays = workDays;
-			succ = true;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	
-		return succ;
+	public void setWorkDays(int workDays) {
+		this.workDays = workDays;
 	}
 
 	public boolean isComplete() {

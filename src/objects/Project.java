@@ -1,5 +1,9 @@
 package objects;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,32 +15,39 @@ public class Project {
 	private double money;
 	private int day = 0;
 	private Stage currentStage;
-	private List<Stage> stages = new ArrayList<Stage>();
-	private List<Dev> devs =  new ArrayList<Dev>();
-	private List<Computer> computers =  new ArrayList<Computer>();
-	private List<Activity> activities =  new ArrayList<Activity>();
-	private List<Dev> dailyDevs = new ArrayList<Dev>();
-
+	private List<Stage> stages = new ArrayList<>();
+	private List<Dev> devs =  new ArrayList<>();
+	private List<Computer> computers =  new ArrayList<>();
+	private List<Activity> activities =  new ArrayList<>();
+	private List<Dev> dailyDevs = new ArrayList<>();
 
 	public boolean estabilishExpenses(double money) {
-		return false;
+		if(money <= 0){
+			return false;
+		}
+		this.budget = money;
+		this.money = money;
+		return true;
 	}
 
-	public boolean setSchedule(int stageID, int workDays) {
-		boolean success = false;
+	public void setSchedule(int stageID, int workDays) {
 		try{
 			Stage s = getStage(stageID);
-			success = s.setWorkDays(workDays);
+			s.setWorkDays(workDays);
 		}
 		catch (Exception e){
 			e.printStackTrace();
 		}
-		
-		return success;
 	}
 
 	public boolean nextStage() {
-		return false;
+		int idx = stages.indexOf(currentStage);
+
+		if (idx < 0 || idx+1 == stages.size())
+			return false;
+
+		currentStage = stages.get(idx + 1);
+		return true;
 	}
 
 	public Stage getStage(int ID) {
@@ -47,8 +58,21 @@ public class Project {
 
 	}
 
-	public void endDay() {
-
+	public boolean endDay() {
+		for(Dev d : devs){
+			d.endDay();
+			money -= d.getSalary();
+		}
+		for(Computer c : computers){
+			c.endDay();
+		}
+		var complete = currentStage.endDay();
+		if(complete){
+			nextStage();
+		} else if (currentStage.getWorkDays() == 0){
+			penalty();
+		}
+		return complete;
 	}
 
 	public boolean addDailyDev(Dev dev) {
@@ -59,7 +83,7 @@ public class Project {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return success;
 	}
 
@@ -73,7 +97,7 @@ public class Project {
 			e.printStackTrace();
 		}
 		return success;
-		
+
 	}
 
 	public boolean rmDev(int devID) {
@@ -148,14 +172,14 @@ public class Project {
 			}
 
 			else if (computerNo < qnt) {
-				qnt = qnt - computerNo; //adicionar o delta 
+				qnt = qnt - computerNo; //adicionar o delta
 				List<Computer> idleComp = getIdleComputers(); //obtem lista de todos os idle computers
 				if(idleComp.size() >= qnt) { //se existem idle computers o suficiente
 					a.setComputers(qnt,idleComp);
-					success = qnt; 
+					success = qnt;
 				}
 			}
-		} 
+		}
 		catch (Exception e){
 			e.printStackTrace();
 		}
@@ -165,7 +189,7 @@ public class Project {
 
 	public List<Computer> getIdleComputers() {
 		List<Computer> idleComputers = new ArrayList<Computer>();
-		for (Computer c: computers){ 
+		for (Computer c: computers){
 			if(!c.getActivity().equals(null)) {
 				idleComputers.add(c);
 			}
@@ -253,19 +277,24 @@ public class Project {
 		this.activities = activities;
 	}
 
-	
+
 	public List<Dev> getDailyDevs() {
+		if(dailyDevs.size() == 0){
+			generateDailyDevs();
+		}
 		return dailyDevs;
 	}
-	
+
 	public List<Dev> generateDailyDevs() {
-		List<Dev> dailyDevs = new ArrayList<Dev>(); 
-		for (int i = 0; i < MAX_DAILY_DEVS ; ++i) {
+		int dailyDevsNo = 10;
+
+		List<Dev> dailyDevs = new ArrayList<>();
+		for (int i = 0; i < dailyDevsNo ; ++i) {
 			Dev dev = new Dev();
-			dev = dev.rollDev(); //sim, ta meio bizarro
+			dev.rollDev();
 			addDailyDev(dev);
-			
 		}
+
 		return dailyDevs;
 	}
 
@@ -273,4 +302,77 @@ public class Project {
 		this.dailyDevs = dailyDevs;
 	}
 
+	public void openFile(String string) throws IOException {
+		// TODO Colocar no diagrama
+		boolean ReadingActivities = false;
+		int cont = 0;
+		String line = "";
+		String s = "";
+		Activity act = null ;
+		BufferedReader br = new BufferedReader(new FileReader(string));
+		try {
+			StringBuilder sb = new StringBuilder();
+		    line =br.readLine();
+
+		    while (line != null) {
+		    	//System.out.println(line);
+		        if(!line.equals("Activities:")){
+		        	this.description = sb.toString();
+		        	sb.delete(0, sb.length()-1);
+		        	ReadingActivities = true;
+		        }
+		        line = br.readLine();
+		        if(!(line.equals("Name:") || line.equals("Description:"))){
+			        sb.append(line);
+			        sb.append(System.lineSeparator());
+		        }
+
+
+		        if(ReadingActivities){
+
+		        	switch((cont%4)){
+			        	case 0:
+			        		act = new Activity();
+			        		act.setName(line);
+			        		++cont;
+			        		break;
+		        		case 1:
+		        			act.setCost(Double.parseDouble(line));
+		        			++cont;
+		        			break;
+		        		case 2:
+		        			act.setType(line);
+		        			++cont;
+		        			break;
+		        		case 3:
+		        			activities.add(act);
+		        			++cont;
+		        			break;
+		        		default:
+		        			break;
+		        	}
+		        }
+
+		    }
+		    s = sb.toString();
+
+		} finally {
+		    br.close();
+		}
+		// nome
+		// descrição
+		// atividades
+	}
+
+	public int newStage(String stageName) {
+		// TODO Auto-generated method stub
+		Stage s = new Stage(stageName);
+		stages.add(s);
+		return stages.size()-1;
+	}
+
+	public void addActivity(int stageID, int actID) {
+		// TODO Auto-generated method stub
+
+	}
 }

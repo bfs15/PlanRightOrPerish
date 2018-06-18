@@ -11,7 +11,7 @@ public class Computer {
 	}
 	
 	public static double getPricePenalized() {
-		return getPrice() * 0.75; //hardcode mermo
+		return getPrice() * 0.75;
 	}
 	public Computer() {
 		activity = null;

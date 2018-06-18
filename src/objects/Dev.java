@@ -23,18 +23,22 @@ public class Dev {
 		return salary;
 	}
 	
-	public Dev rollDev() {
+	public void rollDev() {
 		Random r = new Random();
-		this.name = getPossibleName(r.nextInt(possibleNames.size())); //obtem um nome aleatoriamente
-		this.productivity  = r.nextDouble() * MAX_PRODUCTIVITY; //(numero de 0 a 1) * valor limitante
-		//			   salarioBase +  (salarioBase * gananciaDoDev * produtividade)
+		// obtem um nome aleatoriamente
+		this.name = getPossibleName(r.nextInt(possibleNames.size()));
+		// (0,1) * valor limitante
+		double prodMin = 100;
+		double prodMax = 400 - prodMin;
+		this.productivity  = r.nextDouble() * prodMax + prodMin;
+		// salarioBase +  (salarioBase * gananciaDoDev * produtividade)
+		// salario varia de acordo com a produtividade, mas sempre dentro de um maximo
+		this.salary = MIN_SALARY + (MIN_SALARY * r.nextDouble() *  this.productivity);
+		// ex 1: 1000.0 + (1000.0* 0.5 * 0.5) = 1250.00
+		// ex 2: 1000.0 + (1000.0* 0.5 * 10) = 6000.00
 
-		this.salary = MIN_SALARY + (MIN_SALARY * r.nextDouble() *  this.productivity); //salario varia de acordo com a produtividade, mas sempre dentro de um maximo
-		//			Exemplo 1: 1000.0 + (1000.0* 0.5 * 0.5) = 1250.00
-		//			Exemplo 2: 1000.0 + (1000.0* 0.5 * 10) = 6000.00
-		this.role = getPossibleRole(r.nextInt(possibleRoles.size())); //obtem um papel aleatoriamente
-		
-		return this;
+		//obtem um papel aleatoriamente
+		this.role = getPossibleRole(r.nextInt(possibleRoles.size()));
 	}
 
 	public void setActivity(Activity act) {
