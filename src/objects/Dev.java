@@ -10,7 +10,7 @@ public class Dev {
 	private String role = "";
 	private Activity activity = null;
 	private Event status = new Event();
-
+	
 	public void destroy() {
 		if(activity != null){
 			activity.rmDev(this);

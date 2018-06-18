@@ -1,6 +1,7 @@
 package objects;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,26 +21,43 @@ public class Project {
 	private List<Computer> computers =  new ArrayList<>();
 	private List<Activity> activities =  new ArrayList<>();
 	private List<Dev> dailyDevs = new ArrayList<>();
+	
+	private static List<String> nameList = new ArrayList<>();
+	
+	public static void readNames(){
+		
+        String fileName = "database/temp.txt";
+        String line = null;
 
+        try {
+            FileReader fileReader =  new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            while((line = bufferedReader.readLine()) != null) {
+                nameList.add(line);
+            }   
+            bufferedReader.close();         
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+		
+	}
 	public boolean estabilishExpenses(double money) {
 		if(money <= 0){
 			return false;
 		}
-		this.budget = money;
+		this.budget = money;	
 		this.money = money;
 		return true;
 	}
 
-	public boolean setSchedule(int stageID, int workDays) {
+	public void setSchedule(int stageID, int workDays) {
 		try{
 			Stage s = getStage(stageID);
 			s.setWorkDays(workDays);
 		}
 		catch (Exception e){
 			e.printStackTrace();
-			return false;
 		}
-		return true;
 	}
 
 	public boolean nextStage() {
@@ -62,7 +80,7 @@ public class Project {
 
 	public boolean endDay() {
 		for(Dev d : devs){
-			boolean roll = d.endDay();
+			d.endDay();
 			money -= d.getSalary();
 		}
 		for(Computer c : computers){
@@ -74,16 +92,14 @@ public class Project {
 		} else if (currentStage.getWorkDays() == 0){
 			penalty();
 		}
-
-		return currentStage == null;
+		return complete;
 	}
 
 	public boolean addDev(int ID) {
 		boolean success = false;
 		try {
-			Dev dev = dailyDevs.get(ID);
+			Dev dev = this.dailyDevs.get(ID);
 			success = devs.add(dev);
-			dailyDevs.set(ID, new Dev());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,17 +109,7 @@ public class Project {
 	}
 
 	public boolean rmDev(int devID) {
-		Dev d;
-		try {
-			d = devs.get(devID);
-		}
-		catch (Exception e){
-			return false;
-		}
-		devs.remove(devID);
-		d.destroy();
-
-		return true;
+		return false;
 	}
 
 	public List<Dev> getIdleDevs() {
@@ -122,20 +128,22 @@ public class Project {
 		for (int i=0;i<quantity;++i) {
 			computers.add(new Computer());
 			money -= Computer.getPrice();
-		}
 
+		}
 		return money;
 	}
 
 	public double rmComputer(int quantity) {
-		while (quantity > 0 ) {
+		while (quantity != 0 ) {
 			Computer c = computers.get(0);
 			money += Computer.getPricePenalized();
-			c.revokeOwnership();
+			Activity a = c.getActivity();
+			if (!a.equals(null)){
+				a.rmComputer(c);
+			}
 			--quantity;
 		}
-
-		return money;
+		return 0;
 	}
 
 	public Activity getActivity(int ID) {
@@ -160,23 +168,23 @@ public class Project {
 		return null;
 	}
 
-	//actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
-	public int setComputer(int actID, int qnt) {
-		int delta = 0;
+	public int setComputer(int actID, int qnt) { //actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
+		int success = 0;
 		try {
 			Activity a  = getActivity(actID);
-
 			int computerNo = a.getComputerNo();
 			if(computerNo > qnt) {
-				delta = computerNo - qnt; //remover o delta
-				a.rmComputers(delta);
-				delta = -delta;
+				qnt = computerNo - qnt; //remover o delta
+				a.rmComputers(qnt);
+				success = -qnt;
 			}
+
 			else if (computerNo < qnt) {
-				delta = qnt - computerNo; //adicionar o delta
+				qnt = qnt - computerNo; //adicionar o delta
 				List<Computer> idleComp = getIdleComputers(); //obtem lista de todos os idle computers
-				if(idleComp.size() >= delta) { //se existem idle computers o suficiente
-					a.setComputers(delta, idleComp);
+				if(idleComp.size() >= qnt) { //se existem idle computers o suficiente
+					a.setComputers(qnt,idleComp);
+					success = qnt;
 				}
 			}
 		}
@@ -184,7 +192,7 @@ public class Project {
 			e.printStackTrace();
 		}
 
-		return delta;
+		return success;
 	}
 
 	public List<Computer> getIdleComputers() {
@@ -277,8 +285,8 @@ public class Project {
 		this.activities = activities;
 	}
 
-
 	public List<Dev> getDailyDevs() {
+			
 		if(dailyDevs.size() == 0){
 			generateDailyDevs();
 		}
