@@ -319,31 +319,22 @@ public class Project {
 		// TODO Colocar no diagrama
 		boolean ReadingActivities = false;
 		int cont = 0;
-		String line;
+		String line = "";
+		String s = "";
 		Activity act = null ;
 		BufferedReader br = new BufferedReader(new FileReader(string));
 		try {
-			StringBuilder sb = new StringBuilder();
-		    line = br.readLine();
+		    StringBuilder sb = new StringBuilder();
+		    line =br.readLine();
 
 		    while (line != null) {
-		        if(!line.equals("Activities:")){
-		        	this.description = sb.toString();
-		        	sb.delete(0, sb.length()-1);
-		        	ReadingActivities = true;
-		        }
-		        line = br.readLine();
-		        if(!(line.equals("Name:") || line.equals("Description:"))){
-			        sb.append(line);
-			        sb.append(System.lineSeparator());
-		        }
-
-
+		    	//System.out.println(line);
+		    	
 		        if(ReadingActivities){
-		        	switch((cont%4)){
+		        	switch((cont%5)){
 			        	case 0:
 			        		act = new Activity();
-			        		act.setName(line);
+			        		act.setName(line); 
 			        		++cont;
 			        		break;
 		        		case 1:
@@ -351,25 +342,49 @@ public class Project {
 		        			++cont;
 		        			break;
 		        		case 2:
-		        			act.setType(line);
+		        			act.setMaxComputerNo(Integer.parseInt(line));
 		        			++cont;
 		        			break;
 		        		case 3:
+		        			act.setType(line);
+		        			++cont;
+		        			break;
+		        		case 4:
 		        			activities.add(act);
 		        			++cont;
 		        			break;
-		        		default:
+		        		default:			
 		        			break;
 		        	}
 		        }
+		        if(line.equals("Activities:")){
+		        	this.description = sb.toString();
+		        	sb.delete(0, sb.length()-1);
+		        	ReadingActivities = true;
+		        }
+		        
+		        if(!(line.equals("Name:") || line.equals("Description:"))){
+			        sb.append(line);
+			        sb.append(System.lineSeparator());
+		        }
+		        line = br.readLine();
+
+
 
 		    }
+		    s = sb.toString();
+		    
 		} finally {
 		    br.close();
 		}
-		// nome
-		// descrição
-		// atividades
+		
+		for(int i = 0;i<activities.size();i++) {
+			System.out.println(activities.get(i).GetName());
+			System.out.println(activities.get(i).GetCost());
+			System.out.println(activities.get(i).getMaxComputerNo());
+			System.out.println(activities.get(i).GetType());
+			System.out.println();
+		}
 	}
 
 	public int newStage(String stageName) {
