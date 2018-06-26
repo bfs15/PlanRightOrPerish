@@ -319,17 +319,17 @@ public class Project {
 		// TODO Colocar no diagrama
 		boolean ReadingActivities = false;
 		int cont = 0;
-		String line = "";
-		String s = "";
+		String line;
 		Activity act = null ;
-		BufferedReader br = new BufferedReader(new FileReader(string));
-		try {
+
+		try ( BufferedReader br = new BufferedReader(new FileReader(string)) )
+		{
 		    StringBuilder sb = new StringBuilder();
-		    line =br.readLine();
+		    line = br.readLine();
 
 		    while (line != null) {
 		    	//System.out.println(line);
-		    	
+
 		        if(ReadingActivities){
 		        	switch((cont%5)){
 			        	case 0:
@@ -357,32 +357,27 @@ public class Project {
 		        			break;
 		        	}
 		        }
+
 		        if(line.equals("Activities:")){
 		        	this.description = sb.toString();
 		        	sb.delete(0, sb.length()-1);
 		        	ReadingActivities = true;
 		        }
-		        
+
 		        if(!(line.equals("Name:") || line.equals("Description:"))){
 			        sb.append(line);
 			        sb.append(System.lineSeparator());
 		        }
+
 		        line = br.readLine();
-
-
-
 		    }
-		    s = sb.toString();
-		    
-		} finally {
-		    br.close();
 		}
 		
-		for(int i = 0;i<activities.size();i++) {
-			System.out.println(activities.get(i).GetName());
-			System.out.println(activities.get(i).GetCost());
+		for(int i = 0; i < activities.size(); i++) {
+			System.out.println(activities.get(i).getName());
+			System.out.println(activities.get(i).getCost());
 			System.out.println(activities.get(i).getMaxComputerNo());
-			System.out.println(activities.get(i).GetType());
+			System.out.println(activities.get(i).getType());
 			System.out.println();
 		}
 	}

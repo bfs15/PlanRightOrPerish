@@ -7,11 +7,12 @@ public class Activity {
 
 	private double cost;
 	private double workDone = 0;
-	private int computerNo;
+
+	private int maxComputerNo;
 	private String type;
 	private String name;
-	private List<Dev> devs =  new ArrayList<Dev>();
-	private List<Computer> computers =  new ArrayList<Computer>();;
+	private List<Dev> devs =  new ArrayList<>();
+	private List<Computer> computers =  new ArrayList<>();
 
 	public boolean work(double productivity) {
 		workDone += productivity;
@@ -52,7 +53,7 @@ public class Activity {
 	}
 
 	public boolean setComputers(int qnt, List<Computer> idleComp) {
-		if(qnt <= computerNo)
+		if(qnt <= maxComputerNo)
 			return false;
 
 		for(int i = 0; i <= qnt; i++){
@@ -82,7 +83,7 @@ public class Activity {
 	}
 
 	public boolean addComputer(Computer c) {
-		if(computers.size() < computerNo)
+		if(computers.size() < maxComputerNo)
 			return false;
 
 		computers.add(c);
@@ -97,6 +98,14 @@ public class Activity {
 
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+
+	public int getMaxComputerNo() {
+		return maxComputerNo;
+	}
+
+	public void setMaxComputerNo(int maxComputerNo) {
+		this.maxComputerNo = maxComputerNo;
 	}
 
 	public String getType() {
