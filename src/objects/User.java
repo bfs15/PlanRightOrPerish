@@ -7,12 +7,10 @@ public class User {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
-
         // Check how many arguments were passed in
         if(args.length == 0)
         {
-            System.out.println("Wrong args\nUsage: java program projectFilename");
+            System.out.println("Error: wrong args\nUsage: java program projectFilename");
             System.exit(0);
         }
 
@@ -107,7 +105,12 @@ public class User {
 
         for(int i = 0; i < acts.size(); i++){
             System.out.println("ID: " + i);
-            System.out.println(acts.get(i));
+            Activity a = acts.get(i);
+            System.out.println(a.getName());
+            System.out.println(a.getCost());
+            System.out.println(a.getMaxComputerNo());
+            System.out.println(a.getType());
+            System.out.println();
         }
     }
 

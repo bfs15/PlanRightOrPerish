@@ -52,7 +52,7 @@ public class Project {
 	}
 
 	public Stage getStage(int ID) {
-		return null;
+		return stages.get(ID);
 	}
 
 	public void penalty() {
@@ -95,7 +95,14 @@ public class Project {
 	}
 
 	public List<Dev> getIdleDevs() {
-		return null;
+		List<Dev> idleDevs = new ArrayList<>();
+
+		for (Dev d : devs) {
+			if(d.getActivity() == null)
+				idleDevs.add(d);
+		}
+
+		return idleDevs;
 	}
 
 	public boolean addDevOnActivity(int activityID, int devID) {
@@ -158,7 +165,7 @@ public class Project {
 	}
 
 	public Dev getDev(int ID) {
-		return null;
+		return devs.get(ID);
 	}
 
 	public List<Dev> getActivityDevs(int actID) {
@@ -328,8 +335,6 @@ public class Project {
 		    line = br.readLine();
 
 		    while (line != null) {
-		    	//System.out.println(line);
-
 		        if(ReadingActivities){
 		        	switch((cont%5)){
 			        	case 0:
@@ -347,10 +352,10 @@ public class Project {
 		        			break;
 		        		case 3:
 		        			act.setType(line);
+							activities.add(act);
 		        			++cont;
 		        			break;
 		        		case 4:
-		        			activities.add(act);
 		        			++cont;
 		        			break;
 		        		default:			
