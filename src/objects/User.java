@@ -80,6 +80,7 @@ public class User {
 
             gameRunning = project.endDay();
         }
+        System.out.println("You perished.");
     }
 
     private static int choose(){
@@ -92,7 +93,7 @@ public class User {
     private static String readStageName(){
         System.out.println("Type the name of a new stage (type \"end\" to complete)");
         String r = scanner.nextLine();
-        System.out.println(r);
+        //System.out.println(r);
         return r;
     }
 
@@ -135,6 +136,27 @@ public class User {
     }
 
     private static void printDay(){
+        String currentStageName = project.getCurrentStage().getName();
+
+        String miniStagePadding = "";
+        if (currentStageName.length()%2 == 1) miniStagePadding = " ";
+        int stagePaddingSize = (currentStageName.length()-5)/2 ;
+        String stagePadding = "";
+        for(int i=0;i<stagePaddingSize;++i) stagePadding+="-";
+        System.out.print(">>>"+stagePadding+"Stage"+stagePadding+"<<<");
+
+        String ca$h = "";
+        int len = String.valueOf(project.getMoney()).length();
+        for(int i=0;i<12+len;++i) ca$h+="$";
+        System.out.println(" "+ca$h);
+
+        System.out.print("|  "+project.getCurrentStage().getName()+" "+miniStagePadding+"|");
+
+
+        System.out.println(" $  BCZ = "+project.getMoney()+"  $");
+        System.out.print(">>>"+stagePadding+"-----"+stagePadding+"<<<");
+        System.out.println(" "+ca$h);
+
         System.out.println("1: See current activities");
         System.out.println("2: See developers");
         System.out.println("3: Buy/Sell computers");
