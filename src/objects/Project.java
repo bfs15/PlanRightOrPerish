@@ -75,7 +75,7 @@ public class Project {
 		}
 		boolean completedStage = currentStage.endDay();
 		boolean stillPlaying = true;
-		if(completedStage){
+		if(completedStage&&currentStage.getWorkDays() >= 0){
 			System.out.println("Current stage completed.");
 			stillPlaying = nextStage();
 		}
