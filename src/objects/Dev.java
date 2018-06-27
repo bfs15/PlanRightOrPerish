@@ -50,7 +50,11 @@ public class Dev {
 		boolean roll = false;
 		
 		if(isWorking){
-            completedAct = activity.work(productivity);
+			double myWork = productivity;
+			if(activity.getType() != role)
+				myWork *= 0.7;
+
+            completedAct = activity.work(myWork);
 			roll = status.roll();
 		}
 
@@ -69,11 +73,12 @@ public class Dev {
 		double prodMin = 100;
 		double prodMax = 400 - prodMin;
 		this.productivity  = r.nextDouble() * prodMax + prodMin;
+		this.salary = Math.floor(this.productivity);
 
-		// salarioBase +  (salarioBase * gananciaDoDev * produtividade)
-		// salario varia de acordo com a produtividade, mas sempre dentro de um maximo
-		this.salary = productivity*2;
-		// salary is between (0.8, 1.2)% of dev deserving salary
+		// salary is a multiple of productivity with some noise
+		this.salary = productivity*2; // deserving salary
+		this.salary = Math.floor(this.salary);
+		// salary is between (0.8, 1.2) times of the dev's deserving salary
         double noiseMin = 0.8;
         double noiseMax = 1.2 - noiseMin;
 		double noiseMult = r.nextDouble()*noiseMax + noiseMin;
@@ -81,10 +86,12 @@ public class Dev {
 
 		// obtem um papel aleatoriamente
         ArrayList<String> possibleRoles = new ArrayList<>();
-        possibleRoles.add("A");
-        possibleRoles.add("B");
-        possibleRoles.add("C");
-        possibleRoles.add("D");
+		possibleRoles.add("Network engineer");
+		possibleRoles.add("Software engineer");
+        possibleRoles.add("Software tester");
+		possibleRoles.add("Web developer");
+		possibleRoles.add("Database Specialist");
+		possibleRoles.add("Super Hacker");
 		this.role = possibleRoles.get(r.nextInt(possibleRoles.size()));
 	}
 
@@ -116,4 +123,7 @@ public class Dev {
 		return status;
 	}
 
+	public String getEvent() {
+		return status.getDescription();
+	}
 }

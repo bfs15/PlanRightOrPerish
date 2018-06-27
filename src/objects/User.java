@@ -25,8 +25,7 @@ public class User {
 
         String stageName;
 
-        stageName = readStageName();
-        while(!stageName.equals("end")) {
+        while( !(stageName = readStageName()).isEmpty() && !stageName.equals("end")) {
 
             int stageID = project.newStage(stageName);
             int actID;
@@ -43,12 +42,12 @@ public class User {
 
             System.out.println("How many work days this stage will have?");
             project.setSchedule(stageID, scanner.nextInt());
-
-            stageName = readStageName();
+            scanner.nextLine();
         }
 
         System.out.println("What will be the project budget?");
         project.establishExpenses(scanner.nextInt());
+        scanner.nextLine();
 
         // start game
         boolean gameRunning = true;
@@ -85,32 +84,53 @@ public class User {
 
     private static int choose(){
         System.out.println("Type the ID of the action you want to take");
-        return scanner.nextInt();
+        int r = scanner.nextInt();
+        scanner.nextLine();
+        return r;
     }
 
     private static String readStageName(){
         System.out.println("Type the name of a new stage (type \"end\" to complete)");
-        return scanner.nextLine();
+        String r = scanner.nextLine();
+        System.out.println(r);
+        return r;
     }
 
     private static int readAddActivityToStage(String stageName){
         System.out.println("Type ID of the activity to add to stage " + stageName + " (type \"-1\" to complete)");
-        return scanner.nextInt();
+        int r = scanner.nextInt();
+        scanner.nextLine();
+        return r;
+    }
+
+    private static void printActivity(Activity a){
+        System.out.println(a.getName());
+        System.out.println(a.getCost());
+        System.out.println(a.getMaxComputerNo());
+        System.out.println(a.getType());
+        System.out.println();
     }
 
 
     private static void printActivities(){
         List<Activity> acts = project.getActivities();
-        System.out.println("Activities\n");
+        System.out.println("Activities:\n");
 
         for(int i = 0; i < acts.size(); i++){
             System.out.println("ID: " + i);
             Activity a = acts.get(i);
-            System.out.println(a.getName());
-            System.out.println(a.getCost());
-            System.out.println(a.getMaxComputerNo());
-            System.out.println(a.getType());
-            System.out.println();
+            printActivity(a);
+        }
+    }
+
+    private static void printCurrentActivities(){
+        List<Activity> acts = project.getCurrentActivities();
+        System.out.println("Activities:\n");
+
+        for(int i = 0; i < acts.size(); i++){
+            System.out.println("ID: " + i);
+            Activity a = acts.get(i);
+            printActivity(a);
         }
     }
 
@@ -128,11 +148,13 @@ public class User {
         while(choice != 0){
             System.out.println("Type the ID of the activity");
             int actID = scanner.nextInt();
+            scanner.nextLine();
             int devID;
             switch (choice){
                 case 1:
                     System.out.println("Type the ID of the developer");
                     devID = scanner.nextInt();
+                    scanner.nextLine();
                     project.addDevOnActivity(actID, devID);
                     break;
 
@@ -140,6 +162,7 @@ public class User {
                     printActivityDevs(actID);
                     System.out.println("Type the ID of the developer");
                     devID = scanner.nextInt();
+                    scanner.nextLine();
                     project.rmDevOnActivity(actID, devID);
                     break;
 
@@ -147,6 +170,7 @@ public class User {
                     printComputerUsage();
                     System.out.println("Type the set quantity of computers you want for this activity");
                     int computerQnt = scanner.nextInt();
+                    scanner.nextLine();
                     project.setComputer(actID, computerQnt);
                     break;
                 default:
@@ -160,7 +184,9 @@ public class User {
     }
     private static void menuActivitiesPrint(){
         printIdleDevs();
-        printActivities();
+        System.out.println();
+        printCurrentActivities();
+        System.out.println("-- Options --");
         System.out.println("1: Allocate Developer");
         System.out.println("2: Deallocate Developer");
         System.out.println("3: Set computers");
@@ -169,7 +195,7 @@ public class User {
 
 
     private static void printIdleDevs(){
-        System.out.println("Idle developers");
+        System.out.println("Idle developers:");
         List<Dev> devList = project.getIdleDevs();
         for (Dev d : devList) {
             print(d);
@@ -185,12 +211,12 @@ public class User {
     }
 
     private static void print(Dev d){
-        System.out.println("Deallocate from ");
         System.out.println("Name: " + d.getName());
         System.out.println("Role: " + d.getRole());
         System.out.println("Productivity: " + d.getProductivity());
         System.out.println("Salary: " + d.getSalary());
-        System.out.println("Status: " + d.getStatus());
+        System.out.println("Event: " + d.getEvent());
+        System.out.println();
     }
 
     private static void menuDevelopers(){
@@ -202,20 +228,27 @@ public class User {
             switch (choice){
                 case 1:
                     // Print daily devs
+                    System.out.println("Today's dev shortlist:");
+                    System.out.println();
                     List<Dev> dailyDevs = project.getDailyDevs();
-                    for(Dev d : dailyDevs){
-                        if( ! d.getName().equals(""))
+                    for(int i = 0; i < dailyDevs.size(); ++i){
+                        Dev d = dailyDevs.get(i);
+                        if( ! d.getName().equals("")) {
+                            System.out.println("ID: " + i);
                             print(d);
+                        }
                     }
 
                     System.out.println("Type the ID of the developer to hire");
                     devID = scanner.nextInt();
+                    scanner.nextLine();
                     project.addDev(devID);
                     break;
 
                 case 2:
                     System.out.println("Type the ID of the developer to dismiss");
                     devID = scanner.nextInt();
+                    scanner.nextLine();
                     boolean succ = project.rmDev(devID);
                     if(succ){
                         System.out.println("Dev " + devID + " removed");
@@ -262,6 +295,7 @@ public class User {
                 case 1:
                     System.out.println("Type the quantity to buy");
                     quantity = scanner.nextInt();
+                    scanner.nextLine();
                     money = project.addComputer(quantity);
                     System.out.println("Project money: " + money);
                     break;
@@ -269,6 +303,7 @@ public class User {
                 case 2:
                     System.out.println("Type the quantity to sell");
                     quantity = scanner.nextInt();
+                    scanner.nextLine();
                     money = project.rmComputer(quantity);
                     System.out.println("Project money: " + money);
                     break;

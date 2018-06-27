@@ -9,16 +9,21 @@ public class Event {
 	private String description;
 
 	public boolean isAvailable() {
-		return false;
+		if(type == 1)
+			return false;
+
+		return true;
 	}
 
 	public boolean roll() {
 		Random r = new Random();
 		double randNum  = r.nextDouble();
 		if(randNum < 0.1){
-			type = 0;
-			duration = r.nextInt(3);
-			description = "is playing a game";
+			description = "is sick at home";
+			type = 1;
+
+			int maxDuration = 3;
+			duration = 1 + r.nextInt(maxDuration);
 			return true;
 		}
 

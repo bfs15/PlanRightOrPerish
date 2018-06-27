@@ -47,6 +47,7 @@ public class Project {
 		if (idx < 0 || idx+1 == stages.size())
 			return false;
 
+		System.out.println("Advancing to next project stage.");
 		currentStage = stages.get(idx + 1);
 		return true;
 	}
@@ -56,12 +57,17 @@ public class Project {
 	}
 
 	public void penalty() {
-
+		System.out.println("Penalty received, 5% of project budget.");
+		money -= budget*0.05;
 	}
 
 	public boolean endDay() {
 		for(Dev d : devs){
 			boolean event = d.endDay();
+			if(event){
+				System.out.println("Developer " + d.getName() + " had an event.");
+				System.out.println(d.getEvent());
+			}
 			money -= d.getSalary();
 		}
 		for(Computer c : computers){
@@ -69,8 +75,10 @@ public class Project {
 		}
 		var complete = currentStage.endDay();
 		if(complete){
+			System.out.println("Current stage completed.");
 			nextStage();
 		} else if (currentStage.getWorkDays() == 0){
+			System.out.println("Current stage not finished before deadline.");
 			penalty();
 		}
 		return complete;
@@ -300,6 +308,10 @@ public class Project {
 		this.activities = activities;
 	}
 
+	public List<Activity> getCurrentActivities() {
+		return currentStage.getActivities();
+	}
+
 	public List<Dev> getDailyDevs() {
 			
 		if(dailyDevs.size() == 0){
@@ -390,6 +402,9 @@ public class Project {
 	public int newStage(String stageName) {
 		Stage s = new Stage(stageName);
 		stages.add(s);
+		// If first stage added
+		if(stages.size() == 1 && currentStage == null)
+			currentStage = s;
 		return stages.size()-1;
 	}
 
