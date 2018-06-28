@@ -9,8 +9,7 @@ public class User {
 
     public static void main(String[] args) {
         // Check how many arguments were passed in
-     if(args.length == 0)
-        {
+        if(args.length == 0) {
             System.out.println("Error: wrong args\nUsage: java program projectFilename");
             System.exit(0);
         }
@@ -57,9 +56,8 @@ public class User {
             int choice;
 
             printDay();
-            choice = choose();
 
-            while(choice != 0) {
+            while( (choice = choose()) != 0 ) {
                 switch (choice){
                     case 1:
                         menuActivities();
@@ -76,11 +74,11 @@ public class User {
                 }
 
                 printDay();
-                choice = choose();
             }
 
             gameRunning = project.endDay();
         }
+
         System.out.println("You perished.");
         System.out.println(" @@@@@                                        @@@@@\r\n" + 
         		"@@@@@@@                                      @@@@@@@\r\n" + 
@@ -217,9 +215,10 @@ public class User {
     }
 
     private static void menuActivities(){
+        int choice;
+
         menuActivitiesPrint();
-        int choice = choose();
-        while(choice != 0){
+        while( (choice = choose()) != 0 ){
             System.out.println("Type the ID of the activity");
             int actID = scanner.nextInt();
             scanner.nextLine();
@@ -253,7 +252,6 @@ public class User {
             }
 
             menuActivitiesPrint();
-            choice = choose();
         }
     }
     private static void menuActivitiesPrint(){

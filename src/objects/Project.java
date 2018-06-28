@@ -118,7 +118,13 @@ public class Project {
 	}
 
 	public boolean rmDev(int devID) {
-		return false;
+		try {
+			devs.remove(devID);
+		} catch (Exception e) {
+			System.out.println("Dev not found");
+			return false;
+		}
+		return true;
 	}
 
 	public List<Dev> getIdleDevs() {
@@ -133,29 +139,21 @@ public class Project {
 	}
 
 	public boolean addDevOnActivity(int activityID, int devID) {
-        Activity a;
-        Dev d;
-        try {
-            a = activities.get(activityID);
-            d = devs.get(devID);
-        } catch (Exception e){
-        	System.out.println("Activity or Developer not found");
-            return false;
-        }
+		Activity a = getActivity(activityID);
+		Dev d = getDev(devID);
+		if(a == null || d == null){
+			return false;
+		}
 
         return a.addDev(d);
 	}
 
 	public boolean rmDevOnActivity(int activityID, int devID) {
-        Activity a;
-        Dev d;
-        try {
-            a = activities.get(activityID);
-            d = devs.get(devID);
-        } catch (Exception e){
-        	System.out.println("Activity or Developer not found");
-            return false;
-        }
+        Activity a = getActivity(activityID);
+        Dev d = getDev(devID);
+        if(a == null || d == null){
+        	return false;
+		}
 
         return a.rmDev(d);
 	}
@@ -192,16 +190,22 @@ public class Project {
 		Activity a = null;
 		try {
 			a = activities.get(ID);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Activity not found");
 		}
 
 		return a;
 	}
 
 	public Dev getDev(int ID) {
-		return devs.get(ID);
+		Dev d = null;
+		try {
+			d = devs.get(ID);
+		} catch (Exception e) {
+			System.out.println("Dev not found");
+		}
+
+		return d;
 	}
 
 	public List<Dev> getActivityDevs(int actID) {
