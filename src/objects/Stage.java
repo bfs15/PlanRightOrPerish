@@ -15,6 +15,7 @@ public class Stage {
 	}
 
 	public boolean endDay() {
+		workDays-=1;
 		return calcComplete();
 	}
 

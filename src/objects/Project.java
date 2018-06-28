@@ -73,15 +73,34 @@ public class Project {
 		for(Computer c : computers){
 			c.endDay();
 		}
-		var complete = currentStage.endDay();
-		if(complete){
+		boolean completedStage = currentStage.endDay();
+		boolean stillPlaying = true;
+		if(completedStage&&currentStage.getWorkDays() >= 0){
 			System.out.println("Current stage completed.");
-			nextStage();
-		} else if (currentStage.getWorkDays() == 0){
+			stillPlaying = nextStage();
+		}
+		else if (!completedStage&&currentStage.getWorkDays() == 0){
 			System.out.println("Current stage not finished before deadline.");
 			penalty();
+			stillPlaying = getMoney() > 0;
 		}
-		return complete;
+
+		else if (!completedStage&&currentStage.getWorkDays() < 0){
+			System.out.println("Current stage is late by "+Math.abs(currentStage.getWorkDays())+" sunrises.");
+			stillPlaying = getMoney() > 0;
+		}
+
+		else if (!completedStage&&currentStage.getWorkDays() < 0){
+			System.out.println("Current stage is late by "+Math.abs(currentStage.getWorkDays())+" sunrises.");
+			//if(Math.abs(currentStage.getWorkDays())%7 == 0) penalty();
+			stillPlaying = getMoney() > 0;
+		}
+
+		else if (completedStage&&currentStage.getWorkDays() < 0){
+			System.out.println("Current stage was late by "+Math.abs(currentStage.getWorkDays())+" sunrises.\n Plan right next time.");
+			stillPlaying = getMoney() > 0;
+		}
+		return stillPlaying ;
 	}
 
 	public boolean addDev(int ID) {

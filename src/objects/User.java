@@ -80,6 +80,7 @@ public class User {
 
             gameRunning = project.endDay();
         }
+        System.out.println("You perished.");
     }
 
     private static int choose(){
@@ -92,7 +93,7 @@ public class User {
     private static String readStageName(){
         System.out.println("Type the name of a new stage (type \"end\" to complete)");
         String r = scanner.nextLine();
-        System.out.println(r);
+        //System.out.println(r);
         return r;
     }
 
@@ -135,6 +136,40 @@ public class User {
     }
 
     private static void printDay(){
+        String currentStageName = project.getCurrentStage().getName();
+
+        String miniStagePadding = "";
+        if (currentStageName.length()%2 == 1) miniStagePadding = " ";
+        int stagePaddingSize = (currentStageName.length()-5)/2 ;
+        String stagePadding = "";
+        for(int i=0;i<stagePaddingSize;++i) stagePadding+="-";
+        System.out.print(">>>"+stagePadding+"Stage"+stagePadding+"<<<");
+
+        String ca$h = "";
+        int len = String.valueOf(project.getMoney()).length();
+        for(int i=0;i<13+len;++i) ca$h+="-";
+        System.out.println(" "+ca$h);
+
+        String miniSpace = "";
+        int spaces =  4 - (currentStageName.length()/2);
+        for (int i = 0;i<spaces;++i) miniSpace+=" ";
+
+        if(currentStageName.length() >= 5) System.out.print("|  "+project.getCurrentStage().getName()+" "+miniStagePadding+"|");
+        else System.out.print("|"+miniSpace+project.getCurrentStage().getName()+miniSpace+" "+"|");
+
+        System.out.println(" |  BCZ$ = "+project.getMoney()+"  |");
+        System.out.print(">>>"+stagePadding+"-----"+stagePadding+"<<<");
+        System.out.println(" "+ca$h);
+        int workingDevs = project.getDevs().size()-project.getIdleDevs().size();
+        int workingComputers =project.getComputers().size()-project.getIdleComputers().size();
+        int boxLength = ("| Developers:    Working "+workingDevs+"/"+project.getDevs().size()+" |").length();
+        String boxCloseBox = "";
+        for(int i = 0; i < boxLength; ++i) boxCloseBox+="-";
+        System.out.println(boxCloseBox);
+        System.out.println("| Developers:    Working "+workingDevs+"/"+project.getDevs().size()+" |");
+        System.out.println("| Computers:     Working "+workingComputers+"/"+project.getComputers().size()+" |");
+
+        System.out.println(boxCloseBox);
         System.out.println("1: See current activities");
         System.out.println("2: See developers");
         System.out.println("3: Buy/Sell computers");
@@ -217,6 +252,7 @@ public class User {
     }
 
     private static void print(Dev d){
+
         System.out.println("Name: " + d.getName());
         System.out.println("Role: " + d.getRole());
         System.out.println("Productivity: " + d.getProductivity());

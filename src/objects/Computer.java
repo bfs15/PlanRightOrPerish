@@ -15,6 +15,7 @@ public class Computer {
 	}
 	public Computer() {
 		activity = null;
+		status = new Event();
 	}
 
     public void destroy(){
