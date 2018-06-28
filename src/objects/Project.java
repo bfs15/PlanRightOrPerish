@@ -221,6 +221,7 @@ public class Project {
 		try {
 			Activity a  = getActivity(actID);
 			int computerNo = a.getComputerNo();
+			System.out.println("Act compNo = "+computerNo);
 			if(computerNo > qnt) {
 				qnt = computerNo - qnt; //remover o delta
 				a.rmComputers(qnt);
@@ -238,6 +239,8 @@ public class Project {
                     }
 				}
 			}
+			
+			System.out.println("setComputers: "+success);
 		}
 		catch (Exception e){
 			e.printStackTrace();

@@ -167,12 +167,12 @@ public class User {
         for(int i=0;i<stagePaddingSize;++i) stagePadding+="-";
         System.out.print(">>>"+stagePadding+"Stage"+stagePadding+"<<<");
 
-        String ca$h = " ";
+        String ca$h = "  ";
         
         
         int len = String.format(" | BCZ$ = %.2f |\n",project.getMoney()).length();
-        for(int i=0;i<len-2;++i) ca$h+="-";
-        System.out.println(" "+ca$h);
+        for(int i=0;i<len-4;++i) ca$h+="-";
+        System.out.println(ca$h);
 
         String miniSpace = "";
         int spaces =  4 - (currentStageName.length()/2);
@@ -182,7 +182,7 @@ public class User {
         else System.out.print("|"+miniSpace+project.getCurrentStage().getName()+miniSpace+" "+"|");
         System.out.printf(" | BCZ$ = %.2f |\n",project.getMoney());
         System.out.print(">>>"+stagePadding+"-----"+stagePadding+"<<<");
-        System.out.println(" "+ca$h);
+        System.out.println(ca$h);
         int workingDevs = project.getDevs().size()-project.getIdleDevs().size();
         int workingComputers =project.getComputers().size()-project.getIdleComputers().size();
         int devSize = project.getDevs().size();

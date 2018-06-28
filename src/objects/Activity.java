@@ -11,8 +11,8 @@ public class Activity {
 	private int maxComputerNo;
 	private String type;
 	private String name;
-	private List<Dev> devs =  new ArrayList<>();
-	private List<Computer> computers =  new ArrayList<>();
+	private List<Dev> devs =  new ArrayList<Dev>();
+	private List<Computer> computers =  new ArrayList<Computer>();
 
 	public boolean work(double productivity) {
 		workDone += productivity;
@@ -55,7 +55,7 @@ public class Activity {
 	public boolean setComputers(int qnt, List<Computer> idleComp) {
 		if(qnt <= maxComputerNo)
 			return false;
-
+			
 		for(int i = 0; i <= qnt; i++){
 			boolean succ = addComputer(idleComp.get(i));
 			if( ! succ)
@@ -89,6 +89,7 @@ public class Activity {
 		computers.add(c);
 		// associate computer to activity
 		c.setActivity(this);
+		System.out.println("comp+act");
 		return true;
 	}
 
