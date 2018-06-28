@@ -116,6 +116,9 @@ public class Project {
 		boolean success = false;
 		try {
 			Dev dev = this.dailyDevs.get(ID);
+			if(dev.getName() == ""){
+				return false;
+			}
 			success = devs.add(dev);
 		}
 		catch (Exception e) {
