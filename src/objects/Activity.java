@@ -16,7 +16,7 @@ public class Activity {
 
 	public boolean work(double productivity) {
 		this.workDone += productivity;
-		System.out.println(name+" "+this.workDone+"<-"+productivity);
+		//System.out.println(name+" "+this.workDone+"<-"+productivity);
 		return workDone >= cost;
 	}
 

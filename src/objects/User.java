@@ -124,11 +124,12 @@ public class User {
 
     private static void printActivity(Activity a){
         String activityString = " | ";
-        activityString+=a.getName()+" | ";
-        activityString+=String.format("%.2f",a.getWorkDone())+" | ";
+        activityString+="Name: "+a.getName()+" | ";
+        activityString+="Work: "+String.format("%.2f",a.getWorkDone())+"/";
         activityString+=String.format("%.2f",a.getCost())+" | ";
-        activityString+=a.getMaxComputerNo()+" | ";
-        activityString+=a.getType()+" | ";
+        activityString+="MaxComp: "+a.getMaxComputerNo()+" | ";
+
+        activityString+="Type: "+a.getType()+" | ";
         System.out.println(activityString);
     }
 
@@ -136,7 +137,7 @@ public class User {
     private static void printActivities(){
         List<Activity> acts = project.getActivities();
         System.out.println("Activities:");
-        System.out.println("       | Name | WorkDone | WorkTotal | MaxComputers | Type |");
+
 
         for(int i = 0; i < acts.size(); i++){
             System.out.print("| ID " + i);
@@ -148,7 +149,6 @@ public class User {
     private static void printCurrentActivities(){
         List<Activity> acts = project.getCurrentActivities();
         System.out.println("Current Activities:\n");
-        System.out.println("       | Name | WorkDone | WorkTotal | MaxComputers | Type |");
         for(int i = 0; i < acts.size(); i++){
             System.out.print("| ID " + i);
             Activity a = acts.get(i);
@@ -270,7 +270,6 @@ public class User {
         System.out.println("Idle developers:");
         List<Dev> devList = project.getIdleDevs();
         int i =0;
-        System.out.println("       | Name | Role | Productivity | Salary | Event |");
         for (Dev d : devList) {
         	System.out.print("| ID " + i);
             print(d);
@@ -282,7 +281,6 @@ public class User {
         System.out.println("Developers of the activity " + actID);
         List<Dev> devList = project.getActivityDevs(actID);
         int i = 0;
-        System.out.println("       | Name | Role | Productivity | Salary | Event |");
 
         for (Dev d : devList) {
         	System.out.print("| ID " + i);
@@ -293,11 +291,11 @@ public class User {
 
     private static void print(Dev d){
         String devString = " | ";
-        devString+=d.getName()+" | ";
-        devString+=d.getRole()+" | ";
-        devString+=String.format("%.2f",d.getProductivity())+" | ";
-        devString+=String.format("%.2f",d.getSalary())+" | ";
-        devString+=d.getEvent()+" | ";
+        devString+="Name: "+d.getName()+" | ";
+        devString+="Role: "+d.getRole()+" | ";
+        devString+="Productivity "+String.format("%.2f",d.getProductivity())+" | ";
+        devString+="Salary: "+String.format("%.2f",d.getSalary())+" | ";
+        devString+="Event: "+d.getEvent()+" | ";
         System.out.println(devString);
 
     }
@@ -314,7 +312,6 @@ public class User {
                     System.out.println("Today's dev shortlist:");
                     System.out.println();
                     List<Dev> dailyDevs = project.getDailyDevs();
-                    System.out.println("       | Name | Role | Productivity | Salary | Event |");
                     for(int i = 0; i < dailyDevs.size(); ++i){
                         Dev d = dailyDevs.get(i);
                         if( ! d.getName().equals("")) {
