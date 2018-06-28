@@ -119,11 +119,14 @@ public class Project {
 
 	public boolean rmDev(int devID) {
 		try {
+			Dev d = devs.get(devID);
+			d.destroy();
 			devs.remove(devID);
 		} catch (Exception e) {
 			System.out.println("Dev not found");
 			return false;
 		}
+
 		return true;
 	}
 
@@ -159,7 +162,7 @@ public class Project {
 	}
 
 	public double addComputer(int quantity) {
-		for (int i=0;i<quantity;++i) {
+		for (int i=0; i < quantity; ++i) {
 			computers.add(new Computer());
 			money -= Computer.getPrice();
 		}
