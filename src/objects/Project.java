@@ -44,8 +44,13 @@ public class Project {
 	public boolean nextStage() {
 		int idx = stages.indexOf(currentStage);
 
-		if (idx < 0 || idx+1 == stages.size())
+		if (idx < 0) {
 			return false;
+		}
+		if(idx+1 == stages.size()) {
+			currentStage = null;
+			return false;
+		}
 
 		System.out.println("Advancing to next project stage.");
 		currentStage = stages.get(idx + 1);
@@ -111,6 +116,9 @@ public class Project {
 		boolean success = false;
 		try {
 			Dev dev = this.dailyDevs.get(ID);
+			if(dev.getName() == ""){
+				return false;
+			}
 			success = devs.add(dev);
 		}
 		catch (Exception e) {
