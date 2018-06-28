@@ -49,7 +49,7 @@ public class Dev {
         boolean completedAct = false;
 		boolean roll = false;
 		
-		if(isWorking){
+		if(isWorking && activity !=null){
 			double myWork = productivity;
 			if(activity.getType() != role)
 				myWork *= 0.7;

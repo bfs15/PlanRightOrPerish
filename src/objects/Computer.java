@@ -2,7 +2,7 @@ package objects;
 
 public class Computer {
 
-	private static double price;
+	private static double price = 2000;
 	private Activity activity;
 	private Event status;
 

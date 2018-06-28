@@ -1,4 +1,5 @@
 package objects;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -81,6 +82,27 @@ public class User {
             gameRunning = project.endDay();
         }
         System.out.println("You perished.");
+        System.out.println(" @@@@@                                        @@@@@\r\n" + 
+        		"@@@@@@@                                      @@@@@@@\r\n" + 
+        		"@@@@@@@           @@@@@@@@@@@@@@@            @@@@@@@\r\n" + 
+        		" @@@@@@@@       @@@@@@@@@@@@@@@@@@@        @@@@@@@@\r\n" + 
+        		"     @@@@@     @@@@@@@@@@@@@@@@@@@@@     @@@@@\r\n" + 
+        		"       @@@@@  @@@@@@@@@@@@@@@@@@@@@@@  @@@@@\r\n" + 
+        		"         @@  @@@@@@@@@@@@@@@@@@@@@@@@@  @@\r\n" + 
+        		"            @@@@@@@    @@@@@@    @@@@@@\r\n" + 
+        		"            @@@@@@      @@@@      @@@@@\r\n" + 
+        		"            @@@@@@      @@@@      @@@@@\r\n" + 
+        		"             @@@@@@    @@@@@@    @@@@@\r\n" + 
+        		"              @@@@@@@@@@@  @@@@@@@@@@\r\n" + 
+        		"               @@@@@@@@@@  @@@@@@@@@\r\n" + 
+        		"           @@   @@@@@@@@@@@@@@@@@   @@\r\n" + 
+        		"           @@@@  @@@@ @ @ @ @ @@@@  @@@@\r\n" + 
+        		"          @@@@@   @@@ @ @ @ @ @@@   @@@@@\r\n" + 
+        		"        @@@@@      @@@@@@@@@@@@@      @@@@@\r\n" + 
+        		"      @@@@          @@@@@@@@@@@          @@@@\r\n" + 
+        		"   @@@@@              @@@@@@@              @@@@@\r\n" + 
+        		"  @@@@@@@                                 @@@@@@@\r\n" + 
+        		"   @@@@@                                   @@@@@");
     }
 
     private static int choose(){
@@ -145,9 +167,11 @@ public class User {
         for(int i=0;i<stagePaddingSize;++i) stagePadding+="-";
         System.out.print(">>>"+stagePadding+"Stage"+stagePadding+"<<<");
 
-        String ca$h = "";
-        int len = String.valueOf(project.getMoney()).length();
-        for(int i=0;i<13+len;++i) ca$h+="-";
+        String ca$h = " ";
+        
+        
+        int len = String.format(" | BCZ$ = %.2f |\n",project.getMoney()).length();
+        for(int i=0;i<len-2;++i) ca$h+="-";
         System.out.println(" "+ca$h);
 
         String miniSpace = "";
@@ -156,19 +180,34 @@ public class User {
 
         if(currentStageName.length() >= 5) System.out.print("|  "+project.getCurrentStage().getName()+" "+miniStagePadding+"|");
         else System.out.print("|"+miniSpace+project.getCurrentStage().getName()+miniSpace+" "+"|");
-
-        System.out.println(" |  BCZ$ = "+project.getMoney()+"  |");
+        System.out.printf(" | BCZ$ = %.2f |\n",project.getMoney());
         System.out.print(">>>"+stagePadding+"-----"+stagePadding+"<<<");
         System.out.println(" "+ca$h);
         int workingDevs = project.getDevs().size()-project.getIdleDevs().size();
         int workingComputers =project.getComputers().size()-project.getIdleComputers().size();
-        int boxLength = ("| Developers:    Working "+workingDevs+"/"+project.getDevs().size()+" |").length();
+        int devSize = project.getDevs().size();
+        int compSize = project.getComputers().size();
+        
+        
+        int resourcePaddingSize = Math.max(devSize, compSize);
+        String devString = "| Developers:    Working "+workingDevs+"/"+devSize;
+        String compString ="| Computers:     Working "+workingComputers+"/"+compSize;
+        int deltaStringSize = (devString.length()) - (compString.length());
+        
+        String resourcePadding = "";
+        for(int i = 0; i < Math.abs(deltaStringSize);++i) resourcePadding += " ";
+        if (deltaStringSize > 0) compString += resourcePadding;
+        else if (deltaStringSize < 0) devString += resourcePadding;
+        compString+=" |";
+        devString+=" |";
+        	
+        int boxLength =compString.length();
         String boxCloseBox = "";
         for(int i = 0; i < boxLength; ++i) boxCloseBox+="-";
-        System.out.println(boxCloseBox);
-        System.out.println("| Developers:    Working "+workingDevs+"/"+project.getDevs().size()+" |");
-        System.out.println("| Computers:     Working "+workingComputers+"/"+project.getComputers().size()+" |");
-
+        
+        System.out.println(boxCloseBox);       
+        System.out.println(devString);
+        System.out.println(compString);
         System.out.println(boxCloseBox);
         System.out.println("1: See current activities");
         System.out.println("2: See developers");
@@ -255,8 +294,8 @@ public class User {
 
         System.out.println("Name: " + d.getName());
         System.out.println("Role: " + d.getRole());
-        System.out.println("Productivity: " + d.getProductivity());
-        System.out.println("Salary: " + d.getSalary());
+        System.out.printf("Productivity: %.2f\n" , d.getProductivity());
+        System.out.printf("Salary: %.2f\n",d.getSalary());
         System.out.println("Event: " + d.getEvent());
         System.out.println();
     }
@@ -322,13 +361,11 @@ public class User {
     private static void printComputerUsage(){
         int idleNo = project.getIdleComputers().size();
         int computerNo = project.getComputers().size();
-        System.out.println("Project computers usage " + idleNo + "/" + computerNo);
+        System.out.println("Project computers usage " + (computerNo-idleNo) + "/" + computerNo);
     }
 
     private static void menuComputers(){
         int choice;
-        double money;
-
         menuComputersPrint();
         choice = choose();
         while(choice != 0){
@@ -338,16 +375,14 @@ public class User {
                     System.out.println("Type the quantity to buy");
                     quantity = scanner.nextInt();
                     scanner.nextLine();
-                    money = project.addComputer(quantity);
-                    System.out.println("Project money: " + money);
+                    project.addComputer(quantity);                  
                     break;
 
                 case 2:
                     System.out.println("Type the quantity to sell");
                     quantity = scanner.nextInt();
                     scanner.nextLine();
-                    money = project.rmComputer(quantity);
-                    System.out.println("Project money: " + money);
+                    project.rmComputer(quantity);
                     break;
 
                 default:
@@ -362,8 +397,11 @@ public class User {
 
     private static void menuComputersPrint(){
         printComputerUsage();
-        System.out.println("price per computer: " + Computer.getPrice());
-        System.out.println("sell value: " + Computer.getPricePenalized());
+        double money;
+        money = project.getMoney();
+        System.out.printf("Project money: BCZ$ = %.2f\n", money);
+        System.out.println("Price per computer: " + Computer.getPrice());
+        System.out.println("Sell value: " + Computer.getPricePenalized());
         System.out.println("1: Buy");
         System.out.println("2: Sell");
         System.out.println("0: Exit");

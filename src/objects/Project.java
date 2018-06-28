@@ -169,7 +169,13 @@ public class Project {
 	}
 
 	public double rmComputer(int quantity) {
-		while (quantity > 0 ) {
+		int startingQuantity = quantity;
+		while (quantity > 0) {
+			if(computers.size() <= 0) {
+				System.out.println("~Removed "+(startingQuantity-quantity)+" Computers"); 
+				System.out.println("~No Computers left to remove"); 
+				return 0;
+			}
 		    int idx = computers.size()-1;
 			Computer c = computers.get(idx);
 			money += Computer.getPricePenalized();
@@ -178,6 +184,7 @@ public class Project {
 
 			--quantity;
 		}
+		System.out.println("~Removed "+(startingQuantity-quantity)+" Computers"); 
 		return 0;
 	}
 
