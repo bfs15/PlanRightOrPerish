@@ -9,7 +9,8 @@ public class User {
 
     public static void main(String[] args) {
         // Check how many arguments were passed in
-        if(args.length == 0) {
+     if(args.length == 0)
+        {
             System.out.println("Error: wrong args\nUsage: java program projectFilename");
             System.exit(0);
         }
@@ -56,8 +57,9 @@ public class User {
             int choice;
 
             printDay();
+            choice = choose();
 
-            while( (choice = choose()) != 0 ) {
+            while(choice != 0) {
                 switch (choice){
                     case 1:
                         menuActivities();
@@ -74,11 +76,11 @@ public class User {
                 }
 
                 printDay();
+                choice = choose();
             }
 
             gameRunning = project.endDay();
         }
-
         System.out.println("You perished.");
         System.out.println(" @@@@@                                        @@@@@\r\n" + 
         		"@@@@@@@                                      @@@@@@@\r\n" + 
@@ -125,20 +127,23 @@ public class User {
     }
 
     private static void printActivity(Activity a){
-        System.out.println(a.getName());
-        System.out.println(a.getCost());
-        System.out.println(a.getMaxComputerNo());
-        System.out.println(a.getType());
-        System.out.println();
+        String activityString = " | ";
+        activityString+=a.getName()+" | ";
+        activityString+=String.format("%.2f",a.getWorkDone())+" | ";
+        activityString+=String.format("%.2f",a.getCost())+" | ";
+        activityString+=a.getMaxComputerNo()+" | ";
+        activityString+=a.getType()+" | ";
+        System.out.println(activityString);
     }
 
 
     private static void printActivities(){
         List<Activity> acts = project.getActivities();
-        System.out.println("Activities:\n");
+        System.out.println("Activities:");
+        System.out.println("       | Name | WorkDone | WorkTotal | MaxComputers | Type |");
 
         for(int i = 0; i < acts.size(); i++){
-            System.out.println("ID: " + i);
+            System.out.print("| ID " + i);
             Activity a = acts.get(i);
             printActivity(a);
         }
@@ -146,10 +151,10 @@ public class User {
 
     private static void printCurrentActivities(){
         List<Activity> acts = project.getCurrentActivities();
-        System.out.println("Activities:\n");
-
+        System.out.println("Current Activities:\n");
+        System.out.println("       | Name | WorkDone | WorkTotal | MaxComputers | Type |");
         for(int i = 0; i < acts.size(); i++){
-            System.out.println("ID: " + i);
+            System.out.print("| ID " + i);
             Activity a = acts.get(i);
             printActivity(a);
         }
@@ -215,10 +220,9 @@ public class User {
     }
 
     private static void menuActivities(){
-        int choice;
-
         menuActivitiesPrint();
-        while( (choice = choose()) != 0 ){
+        int choice = choose();
+        while(choice != 0){
             System.out.println("Type the ID of the activity");
             int actID = scanner.nextInt();
             scanner.nextLine();
@@ -252,6 +256,7 @@ public class User {
             }
 
             menuActivitiesPrint();
+            choice = choose();
         }
     }
     private static void menuActivitiesPrint(){
@@ -270,8 +275,9 @@ public class User {
         System.out.println("Idle developers:");
         List<Dev> devList = project.getIdleDevs();
         int i =0;
+        System.out.println("       | Name | Role | Productivity | Salary | Event |");
         for (Dev d : devList) {
-        	System.out.println("ID :" + i);
+        	System.out.print("| ID " + i);
             print(d);
             ++i;
         }
@@ -281,21 +287,24 @@ public class User {
         System.out.println("Developers of the activity " + actID);
         List<Dev> devList = project.getActivityDevs(actID);
         int i = 0;
+        System.out.println("       | Name | Role | Productivity | Salary | Event |");
+
         for (Dev d : devList) {
-        	System.out.println("ID :" + i);
+        	System.out.print("| ID " + i);
             print(d);
             ++i;
         }
     }
 
     private static void print(Dev d){
+        String devString = " | ";
+        devString+=d.getName()+" | ";
+        devString+=d.getRole()+" | ";
+        devString+=String.format("%.2f",d.getProductivity())+" | ";
+        devString+=String.format("%.2f",d.getSalary())+" | ";
+        devString+=d.getEvent()+" | ";
+        System.out.println(devString);
 
-        System.out.println("Name: " + d.getName());
-        System.out.println("Role: " + d.getRole());
-        System.out.printf("Productivity: %.2f\n" , d.getProductivity());
-        System.out.printf("Salary: %.2f\n",d.getSalary());
-        System.out.println("Event: " + d.getEvent());
-        System.out.println();
     }
 
     private static void menuDevelopers(){
@@ -310,10 +319,11 @@ public class User {
                     System.out.println("Today's dev shortlist:");
                     System.out.println();
                     List<Dev> dailyDevs = project.getDailyDevs();
+                    System.out.println("       | Name | Role | Productivity | Salary | Event |");
                     for(int i = 0; i < dailyDevs.size(); ++i){
                         Dev d = dailyDevs.get(i);
                         if( ! d.getName().equals("")) {
-                            System.out.println("ID: " + i);
+                            System.out.print("| ID " + i);
                             print(d);
                         }
                     }
@@ -398,8 +408,8 @@ public class User {
         double money;
         money = project.getMoney();
         System.out.printf("Project money: BCZ$ = %.2f\n", money);
-        System.out.println("Price per computer: " + Computer.getPrice());
-        System.out.println("Sell value: " + Computer.getPricePenalized());
+        System.out.printf("Price per computer: %.2f\n", Computer.getPrice());
+        System.out.printf("Sell value:3 %.2f\n", Computer.getPricePenalized());
         System.out.println("1: Buy");
         System.out.println("2: Sell");
         System.out.println("0: Exit");

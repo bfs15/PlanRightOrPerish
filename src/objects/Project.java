@@ -73,6 +73,10 @@ public class Project {
 		for(Computer c : computers){
 			c.endDay();
 		}
+
+		for(Activity a : activities){
+			System.out.printf("Progress on activity %s: %.2f/%.2f\n",a.getName(),a.getWorkDone(),a.getCost());
+		}
 		boolean completedStage = currentStage.endDay();
 		boolean stillPlaying = true;
 		if(completedStage&&currentStage.getWorkDays() >= 0){
@@ -118,16 +122,7 @@ public class Project {
 	}
 
 	public boolean rmDev(int devID) {
-		try {
-			Dev d = devs.get(devID);
-			d.destroy();
-			devs.remove(devID);
-		} catch (Exception e) {
-			System.out.println("Dev not found");
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	public List<Dev> getIdleDevs() {
@@ -142,27 +137,35 @@ public class Project {
 	}
 
 	public boolean addDevOnActivity(int activityID, int devID) {
-		Activity a = getActivity(activityID);
-		Dev d = getDev(devID);
-		if(a == null || d == null){
-			return false;
-		}
+        Activity a;
+        Dev d;
+        try {
+            a = activities.get(activityID);
+            d = devs.get(devID);
+        } catch (Exception e){
+        	System.out.println("~Activity or Developer not found");
+            return false;
+        }
 
         return a.addDev(d);
 	}
 
 	public boolean rmDevOnActivity(int activityID, int devID) {
-        Activity a = getActivity(activityID);
-        Dev d = getDev(devID);
-        if(a == null || d == null){
-        	return false;
-		}
+        Activity a;
+        Dev d;
+        try {
+            a = activities.get(activityID);
+            d = devs.get(devID);
+        } catch (Exception e){
+        	System.out.println("Activity or Developer not found");
+            return false;
+        }
 
         return a.rmDev(d);
 	}
 
 	public double addComputer(int quantity) {
-		for (int i=0; i < quantity; ++i) {
+		for (int i=0;i<quantity;++i) {
 			computers.add(new Computer());
 			money -= Computer.getPrice();
 		}
@@ -193,22 +196,16 @@ public class Project {
 		Activity a = null;
 		try {
 			a = activities.get(ID);
-		} catch (Exception e) {
-			System.out.println("Activity not found");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return a;
 	}
 
 	public Dev getDev(int ID) {
-		Dev d = null;
-		try {
-			d = devs.get(ID);
-		} catch (Exception e) {
-			System.out.println("Dev not found");
-		}
-
-		return d;
+		return devs.get(ID);
 	}
 
 	public List<Dev> getActivityDevs(int actID) {
@@ -228,7 +225,7 @@ public class Project {
 		try {
 			Activity a  = getActivity(actID);
 			int computerNo = a.getComputerNo();
-			System.out.println("Act compNo = "+computerNo);
+
 			if(computerNo > qnt) {
 				qnt = computerNo - qnt; //remover o delta
 				a.rmComputers(qnt);
@@ -238,8 +235,10 @@ public class Project {
 			else if (computerNo < qnt) {
 				qnt = qnt - computerNo; //adicionar o delta
 				List<Computer> idleComp = getIdleComputers(); //obtem lista de todos os idle computers
+
 				if(idleComp.size() >= qnt) { //se existem idle computers o suficiente
                     success = qnt;
+
 					boolean succ = a.setComputers(qnt,idleComp);
 					if( ! succ){
                         success = 0;
