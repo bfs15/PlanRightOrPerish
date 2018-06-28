@@ -44,8 +44,13 @@ public class Project {
 	public boolean nextStage() {
 		int idx = stages.indexOf(currentStage);
 
-		if (idx < 0 || idx+1 == stages.size())
+		if (idx < 0) {
 			return false;
+		}
+		if(idx+1 == stages.size()) {
+			currentStage = null;
+			return false;
+		}
 
 		System.out.println("Advancing to next project stage.");
 		currentStage = stages.get(idx + 1);
