@@ -74,7 +74,7 @@ public class Project {
 			c.endDay();
 		}
 
-		for(Activity a : activities){
+		for(Activity a : currentStage.getActivities()){
 			System.out.printf("Progress on activity %s: %.2f/%.2f\n",a.getName(),a.getWorkDone(),a.getCost());
 		}
 		boolean completedStage = currentStage.endDay();
@@ -122,7 +122,16 @@ public class Project {
 	}
 
 	public boolean rmDev(int devID) {
-		return false;
+		try {
+			Dev d = devs.get(devID);
+			d.destroy();
+			devs.remove(devID);
+		} catch (Exception e) {
+			System.out.println("Dev not found");
+			return false;
+		}
+
+		return true;
 	}
 
 	public List<Dev> getIdleDevs() {
@@ -140,7 +149,7 @@ public class Project {
         Activity a;
         Dev d;
         try {
-            a = activities.get(activityID);
+            a = getCurrentActivities().get(activityID);
             d = devs.get(devID);
         } catch (Exception e){
         	System.out.println("~Activity or Developer not found");
@@ -165,7 +174,7 @@ public class Project {
 	}
 
 	public double addComputer(int quantity) {
-		for (int i=0;i<quantity;++i) {
+		for (int i = 0; i < quantity; ++i) {
 			computers.add(new Computer());
 			money -= Computer.getPrice();
 		}
@@ -198,14 +207,21 @@ public class Project {
 			a = activities.get(ID);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("~Activity not found");
 		}
 
 		return a;
 	}
 
 	public Dev getDev(int ID) {
-		return devs.get(ID);
+		Dev d = null;
+		try {
+			d = devs.get(ID);
+		} catch (Exception e) {
+			System.out.println("~Dev not found");
+		}
+
+		return d;
 	}
 
 	public List<Dev> getActivityDevs(int actID) {
@@ -223,7 +239,8 @@ public class Project {
 	public int setComputer(int actID, int qnt) { //actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
 		int success = 0;
 		try {
-			Activity a  = getActivity(actID);
+			Activity a  = this.currentStage.getActivities().get(actID);
+			getActivity(actID);
 			int computerNo = a.getComputerNo();
 
 			if(computerNo > qnt) {
@@ -245,11 +262,11 @@ public class Project {
                     }
 				}
 			}
-			
-			System.out.println("setComputers: "+success);
+
+			System.out.println("~Assigned "+success+" computers");
 		}
 		catch (Exception e){
-			e.printStackTrace();
+			System.out.println("~Invalid Activity");
 		}
 
 		return success;

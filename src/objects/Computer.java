@@ -31,8 +31,6 @@ public class Computer {
 		return status.roll();
 	}
 
-
-
 	public void setActivity(Activity a) {
 		activity = a;
 	}

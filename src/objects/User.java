@@ -9,8 +9,7 @@ public class User {
 
     public static void main(String[] args) {
         // Check how many arguments were passed in
-     if(args.length == 0)
-        {
+        if(args.length == 0) {
             System.out.println("Error: wrong args\nUsage: java program projectFilename");
             System.exit(0);
         }
@@ -55,11 +54,9 @@ public class User {
 
         while(gameRunning) {
             int choice;
-
             printDay();
-            choice = choose();
 
-            while(choice != 0) {
+            while( (choice = choose()) != 0 ) {
                 switch (choice){
                     case 1:
                         menuActivities();
@@ -76,7 +73,6 @@ public class User {
                 }
 
                 printDay();
-                choice = choose();
             }
 
             gameRunning = project.endDay();
@@ -221,8 +217,8 @@ public class User {
 
     private static void menuActivities(){
         menuActivitiesPrint();
-        int choice = choose();
-        while(choice != 0){
+        int choice;
+        while( (choice = choose()) != 0 ){
             System.out.println("Type the ID of the activity");
             int actID = scanner.nextInt();
             scanner.nextLine();
@@ -256,7 +252,6 @@ public class User {
             }
 
             menuActivitiesPrint();
-            choice = choose();
         }
     }
     private static void menuActivitiesPrint(){
@@ -409,7 +404,7 @@ public class User {
         money = project.getMoney();
         System.out.printf("Project money: BCZ$ = %.2f\n", money);
         System.out.printf("Price per computer: %.2f\n", Computer.getPrice());
-        System.out.printf("Sell value:3 %.2f\n", Computer.getPricePenalized());
+        System.out.printf("Sell value: %.2f\n", Computer.getPricePenalized());
         System.out.println("1: Buy");
         System.out.println("2: Sell");
         System.out.println("0: Exit");

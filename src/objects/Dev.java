@@ -53,9 +53,9 @@ public class Dev {
 			double myWork = productivity;
 			if(activity.getType() != role)
 				myWork *= 0.7;
-			
-			System.out.println("Work done by"+this.getName()+": "+(myWork + myWork*Math.log(activity.getComputerNo()+1)));
-            completedAct = activity.work(myWork + Math.log10(myWork*activity.getComputerNo()));
+			String formattedMyWork = String.format("%.2f",(myWork + myWork*Math.log(activity.getComputerNo()+1)));
+			System.out.println("Work done by "+this.getName()+": "+formattedMyWork);
+            completedAct = activity.work(myWork + myWork*Math.log(activity.getComputerNo()+1));
 			roll = status.roll();
 		}
 
