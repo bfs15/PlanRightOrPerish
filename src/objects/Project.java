@@ -120,6 +120,7 @@ public class Project {
             a = activities.get(activityID);
             d = devs.get(devID);
         } catch (Exception e){
+        	System.out.println("Activity or Developer not found");
             return false;
         }
 
@@ -133,6 +134,7 @@ public class Project {
             a = activities.get(activityID);
             d = devs.get(devID);
         } catch (Exception e){
+        	System.out.println("Activity or Developer not found");
             return false;
         }
 

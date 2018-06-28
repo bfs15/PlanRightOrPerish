@@ -8,7 +8,7 @@ public class User {
 
     public static void main(String[] args) {
         // Check how many arguments were passed in
-        if(args.length == 0)
+     if(args.length == 0)
         {
             System.out.println("Error: wrong args\nUsage: java program projectFilename");
             System.exit(0);
@@ -197,16 +197,22 @@ public class User {
     private static void printIdleDevs(){
         System.out.println("Idle developers:");
         List<Dev> devList = project.getIdleDevs();
+        int i =0;
         for (Dev d : devList) {
+        	System.out.println("ID :" + i);
             print(d);
+            ++i;
         }
     }
 
     private static void printActivityDevs(int actID){
         System.out.println("Developers of the activity " + actID);
         List<Dev> devList = project.getActivityDevs(actID);
+        int i = 0;
         for (Dev d : devList) {
+        	System.out.println("ID :" + i);
             print(d);
+            ++i;
         }
     }
 
