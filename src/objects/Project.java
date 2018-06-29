@@ -26,7 +26,7 @@ public class Project {
 		if(money <= 0){
 			return false;
 		}
-		this.budget = money;	
+		this.budget = money;
 		this.money = money;
 		return true;
 	}
@@ -79,12 +79,14 @@ public class Project {
 		for(Activity a : getCurrentActivities()){
 			System.out.printf("Progress on activity %s: %.2f/%.2f\n",a.getName(),a.getWorkDone(),a.getCost());
 		}
+
+		int workDays = currentStage.getWorkDays();
 		boolean completedStage = currentStage.endDay();
 		boolean stillPlaying = getMoney() > 0;
 		if(completedStage){
 			stillPlaying = stillPlaying && nextStage();
 
-			if(currentStage.getWorkDays() >= 0){
+			if(workDays >= 0){
 				System.out.println("Current stage completed.");
 			} else {
 				System.out.println("Current stage was late by "+Math.abs(currentStage.getWorkDays())+" sunrises.\n Plan right next time.");
@@ -92,7 +94,7 @@ public class Project {
 		}
 		else // if ( ! completedStage)
 		{
-			if(currentStage.getWorkDays() == 0){
+			if(workDays == 0){
 				System.out.println("Current stage not finished before deadline.");
 				penalty();
 			} else if (currentStage.getWorkDays() < 0){
@@ -111,9 +113,11 @@ public class Project {
 				return false;
 			}
 			success = devs.add(dev);
+			// substitute the hired for an invalid Dev in daily list
+			dailyDevs.set(ID, new Dev());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("~Couldn't add this developer.");
 			return false;
 		}
 		return success;
@@ -124,16 +128,8 @@ public class Project {
 		if(d == null)
 			return false;
 
+		devs.remove(devID);
 		d.destroy();
-
-		try {
-			devs.remove(devID);
-		} catch (Exception e) {
-			System.out.println("~Found Dev but exception on removing from array");
-			System.out.println(e);
-			return false;
-		}
-
 		return true;
 	}
 
@@ -180,7 +176,7 @@ public class Project {
 		while (quantity > 0) {
 			if(computers.size() <= 0) {
 				System.out.println("~No Computers left to remove"); 
-				return 0;
+				return money;
 			}
 		    int idx = computers.size()-1;
 			Computer c = computers.get(idx);
@@ -191,7 +187,7 @@ public class Project {
 			--quantity;
 		}
 		System.out.println("Removed "+(startingQuantity-quantity)+" Computers");
-		return 0;
+		return money;
 	}
 
 	public Stage getStage(int ID) {
@@ -247,7 +243,8 @@ public class Project {
 		return act.getDevs();
 	}
 
-	public int setComputer(int actID, int qnt) { //actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
+	//actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
+	public int setComputer(int actID, int qnt) {
 		int success = 0;
 		try {
 			Activity a  = getCurrentActivity(actID);
@@ -377,7 +374,6 @@ public class Project {
 	}
 
 	public List<Dev> getDailyDevs() {
-			
 		if(dailyDevs.size() == 0){
 			generateDailyDevs();
 		}
@@ -399,13 +395,12 @@ public class Project {
 	}
 
 	public void openFile(String string) throws IOException {
-		// TODO Colocar no diagrama
 		boolean ReadingActivities = false;
 		int cont = 0;
 		String line;
 		Activity act = null ;
 
-		try ( BufferedReader br = new BufferedReader(new FileReader(string)) )
+		try (BufferedReader br = new BufferedReader(new FileReader(string)) )
 		{
 		    StringBuilder sb = new StringBuilder();
 		    line = br.readLine();
@@ -452,14 +447,6 @@ public class Project {
 
 		        line = br.readLine();
 		    }
-		}
-		
-		for(int i = 0; i < activities.size(); i++) {
-			System.out.println(activities.get(i).getName());
-			System.out.println(activities.get(i).getCost());
-			System.out.println(activities.get(i).getMaxComputerNo());
-			System.out.println(activities.get(i).getType());
-			System.out.println();
 		}
 	}
 

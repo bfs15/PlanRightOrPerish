@@ -18,7 +18,7 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         System.out.println("Project:");
         System.out.println(project.getDescription());
         // Print activities so user can make stages
@@ -113,13 +113,12 @@ public class User {
         return r;
     }
 
-    private static void printActivity(Activity a){
+    private static void print(Activity a){
         String activityString = " | ";
         activityString+="Name: "+a.getName()+" | ";
         activityString+="Work: "+String.format("%.2f",a.getWorkDone())+"/";
         activityString+=String.format("%.2f",a.getCost())+" | ";
-        activityString+="MaxComp: "+a.getMaxComputerNo()+" | ";
-
+        activityString+="Computers: "+a.getComputerNo()+"/"+a.getMaxComputerNo()+" | ";
         activityString+="Type: "+a.getType()+" | ";
         System.out.println(activityString);
     }
@@ -132,7 +131,7 @@ public class User {
         for(int i = 0; i < acts.size(); i++){
             System.out.print("| ID " + i);
             Activity a = acts.get(i);
-            printActivity(a);
+            print(a);
         }
     }
 
@@ -142,7 +141,7 @@ public class User {
         for(int i = 0; i < acts.size(); i++){
             System.out.print("| ID " + i);
             Activity a = acts.get(i);
-            printActivity(a);
+            print(a);
         }
     }
 
@@ -245,7 +244,7 @@ public class User {
         }
     }
     private static void menuActivitiesPrint(){
-        printIdleDevs();
+        printDevs();
         System.out.println();
         printCurrentActivities();
         System.out.println("-- Options --");
@@ -253,18 +252,6 @@ public class User {
         System.out.println("2: Deallocate Developer");
         System.out.println("3: Set computers");
         System.out.println("0: Exit");
-    }
-
-
-    private static void printIdleDevs(){
-        System.out.println("Idle developers:");
-        List<Dev> devList = project.getIdleDevs();
-        int i =0;
-        for (Dev d : devList) {
-        	System.out.print("| ID " + i);
-            print(d);
-            ++i;
-        }
     }
 
     private static void printActivityDevs(int actID){
@@ -285,7 +272,11 @@ public class User {
         devString+="Role: "+d.getRole()+" | ";
         devString+="Productivity "+String.format("%.2f",d.getProductivity())+" | ";
         devString+="Salary: "+String.format("%.2f",d.getSalary())+" | ";
-        devString+="Event: "+d.getEvent()+" | ";
+        devString+="Event: "+ d.getEvent()+" | ";
+        if(d.getActivity() != null)
+            devString+="Activity: "+ d.getActivity().getName()+" | ";
+        else
+            devString+="Activity: -------------- | ";
         System.out.println(devString);
 
     }
@@ -337,12 +328,18 @@ public class User {
         }
     }
 
-    private static void menuDevelopersPrint(){
-        // Print devs
+    private static void printDevs(){
         List<Dev> devs = project.getDevs();
+        int i = 0;
         for(Dev d : devs){
+            System.out.print("| ID " + i);
             print(d);
+            ++i;
         }
+    }
+
+    private static void menuDevelopersPrint(){
+        printDevs();
         System.out.println("1: Hire");
         System.out.println("2: Dismiss");
         System.out.println("0: Exit");

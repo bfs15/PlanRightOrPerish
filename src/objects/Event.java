@@ -6,7 +6,7 @@ public class Event {
 
 	private int type;
 	private int duration;
-	private String description;
+	private String description = "";
 
 	public boolean isAvailable() {
 		if(type == 1)

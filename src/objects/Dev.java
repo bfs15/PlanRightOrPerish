@@ -97,6 +97,9 @@ public class Dev {
 	}
 
 	public void setActivity(Activity act) {
+    	if(activity != null && activity != act){
+			activity.rmDev(this);
+		}
 		activity = act;
 	}
 	

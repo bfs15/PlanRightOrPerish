@@ -11,8 +11,8 @@ public class Activity {
 	private int maxComputerNo;
 	private String type;
 	private String name;
-	private List<Dev> devs =  new ArrayList<Dev>();
-	private List<Computer> computers =  new ArrayList<Computer>();
+	private List<Dev> devs =  new ArrayList<>();
+	private List<Computer> computers =  new ArrayList<>();
 
 	public boolean work(double productivity) {
 		this.workDone += productivity;
@@ -29,8 +29,8 @@ public class Activity {
 			return false;
 		}
 
-		devs.add(dev);
 		dev.setActivity(this);
+		devs.add(dev);
 		return true;
 	}
 
@@ -41,7 +41,7 @@ public class Activity {
 		}
 
 		devs.remove(idx);
-		d.unsetActivity();
+		d.setActivity(null);
 		return true;
 	}
 
@@ -80,7 +80,7 @@ public class Activity {
 		try {
 			int lastIdx = computers.size()-1;
 			Computer c = computers.get(lastIdx);
-			c.unsetActivity();
+			c.setActivity(null);
 			computers.remove(c);
 		}
 		catch (Exception e){
