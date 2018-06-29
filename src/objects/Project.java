@@ -48,6 +48,7 @@ public class Project {
 			return false;
 		}
 		if(idx+1 == stages.size()) {
+			System.out.println("Last stage completed.");
 			currentStage = null;
 			return false;
 		}
@@ -55,10 +56,6 @@ public class Project {
 		System.out.println("Advancing to next project stage.");
 		currentStage = stages.get(idx + 1);
 		return true;
-	}
-
-	public Stage getStage(int ID) {
-		return stages.get(ID);
 	}
 
 	public void penalty() {
@@ -79,36 +76,30 @@ public class Project {
 			c.endDay();
 		}
 
-		for(Activity a : currentStage.getActivities()){
+		for(Activity a : getCurrentActivities()){
 			System.out.printf("Progress on activity %s: %.2f/%.2f\n",a.getName(),a.getWorkDone(),a.getCost());
 		}
 		boolean completedStage = currentStage.endDay();
-		boolean stillPlaying = true;
-		if(completedStage&&currentStage.getWorkDays() >= 0){
-			System.out.println("Current stage completed.");
-			stillPlaying = nextStage();
+		boolean stillPlaying = getMoney() > 0;
+		if(completedStage){
+			stillPlaying = stillPlaying && nextStage();
+
+			if(currentStage.getWorkDays() >= 0){
+				System.out.println("Current stage completed.");
+			} else {
+				System.out.println("Current stage was late by "+Math.abs(currentStage.getWorkDays())+" sunrises.\n Plan right next time.");
+			}
 		}
-		else if (!completedStage&&currentStage.getWorkDays() == 0){
-			System.out.println("Current stage not finished before deadline.");
-			penalty();
-			stillPlaying = getMoney() > 0;
+		else // if ( ! completedStage)
+		{
+			if(currentStage.getWorkDays() == 0){
+				System.out.println("Current stage not finished before deadline.");
+				penalty();
+			} else if (currentStage.getWorkDays() < 0){
+				System.out.println("Current stage is late by "+Math.abs(currentStage.getWorkDays())+" sunrises.");
+			}
 		}
 
-		else if (!completedStage&&currentStage.getWorkDays() < 0){
-			System.out.println("Current stage is late by "+Math.abs(currentStage.getWorkDays())+" sunrises.");
-			stillPlaying = getMoney() > 0;
-		}
-
-		else if (!completedStage&&currentStage.getWorkDays() < 0){
-			System.out.println("Current stage is late by "+Math.abs(currentStage.getWorkDays())+" sunrises.");
-			//if(Math.abs(currentStage.getWorkDays())%7 == 0) penalty();
-			stillPlaying = getMoney() > 0;
-		}
-
-		else if (completedStage&&currentStage.getWorkDays() < 0){
-			System.out.println("Current stage was late by "+Math.abs(currentStage.getWorkDays())+" sunrises.\n Plan right next time.");
-			stillPlaying = getMoney() > 0;
-		}
 		return stillPlaying ;
 	}
 
@@ -126,16 +117,20 @@ public class Project {
 			return false;
 		}
 		return success;
-
 	}
 
 	public boolean rmDev(int devID) {
+		Dev d = getDev(devID);
+		if(d == null)
+			return false;
+
+		d.destroy();
+
 		try {
-			Dev d = devs.get(devID);
-			d.destroy();
 			devs.remove(devID);
 		} catch (Exception e) {
-			System.out.println("Dev not found");
+			System.out.println("~Found Dev but exception on removing from array");
+			System.out.println(e);
 			return false;
 		}
 
@@ -154,31 +149,22 @@ public class Project {
 	}
 
 	public boolean addDevOnActivity(int activityID, int devID) {
-        Activity a;
-        Dev d;
-        try {
-            a = getCurrentActivities().get(activityID);
-            d = devs.get(devID);
-        } catch (Exception e){
-        	System.out.println("~Activity or Developer not found");
-            return false;
-        }
-
-        return a.addDev(d);
+		Activity a = getCurrentActivity(activityID);
+		Dev d = getDev(devID);
+		if(a == null || d == null){
+			return false;
+		}
+		return a.addDev(d);
 	}
 
 	public boolean rmDevOnActivity(int activityID, int devID) {
-        Activity a;
-        Dev d;
-        try {
-            a = activities.get(activityID);
-            d = devs.get(devID);
-        } catch (Exception e){
-        	System.out.println("Activity or Developer not found");
-            return false;
-        }
+        Activity a = getCurrentActivity(activityID);
+		Dev d = getDev(devID);
+		if(a == null || d == null){
+			return false;
+		}
 
-        return a.rmDev(d);
+		return a.rmDev(d);
 	}
 
 	public double addComputer(int quantity) {
@@ -193,7 +179,6 @@ public class Project {
 		int startingQuantity = quantity;
 		while (quantity > 0) {
 			if(computers.size() <= 0) {
-				System.out.println("~Removed "+(startingQuantity-quantity)+" Computers"); 
 				System.out.println("~No Computers left to remove"); 
 				return 0;
 			}
@@ -205,41 +190,59 @@ public class Project {
 
 			--quantity;
 		}
-		System.out.println("~Removed "+(startingQuantity-quantity)+" Computers"); 
+		System.out.println("Removed "+(startingQuantity-quantity)+" Computers");
 		return 0;
 	}
 
+	public Stage getStage(int ID) {
+		Stage s;
+		try {
+			s = stages.get(ID);
+		} catch (Exception e) {
+			System.out.println("~Stage not found");
+			return null;
+		}
+		return s;
+	}
+
 	public Activity getActivity(int ID) {
-		Activity a = null;
+		Activity a;
 		try {
 			a = activities.get(ID);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println("~Activity not found");
+			return null;
 		}
+		return a;
+	}
 
+	public Activity getCurrentActivity(int activityID) {
+		Activity a;
+		try {
+			a = getCurrentActivities().get(activityID);
+		} catch (Exception e) {
+			System.out.println("~Activity not found");
+			return null;
+		}
 		return a;
 	}
 
 	public Dev getDev(int ID) {
-		Dev d = null;
+		Dev d;
 		try {
 			d = devs.get(ID);
 		} catch (Exception e) {
 			System.out.println("~Dev not found");
+			return null;
 		}
-
 		return d;
 	}
 
 	public List<Dev> getActivityDevs(int actID) {
-	    Activity act;
-        try {
-            act = activities.get(actID);
-        } catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
+	    Activity act = getCurrentActivity(actID);
+	    if(act == null){
+	    	return new ArrayList<>();
+		}
 
 		return act.getDevs();
 	}
@@ -247,8 +250,7 @@ public class Project {
 	public int setComputer(int actID, int qnt) { //actID = id de uma atividade, qnt = numero DESEJADO de computadores para uma atividade
 		int success = 0;
 		try {
-			Activity a  = this.currentStage.getActivities().get(actID);
-			getActivity(actID);
+			Activity a  = getCurrentActivity(actID);
 			int computerNo = a.getComputerNo();
 
 			if(computerNo > qnt) {
@@ -470,13 +472,10 @@ public class Project {
 		return stages.size()-1;
 	}
 
-	public boolean addActivity(int stageID, int actID) {
-        Stage s;
-        Activity a;
-	    try {
-            s = stages.get(stageID);
-            a = activities.get(actID);
-        } catch (Exception e){
+	public boolean stageAddActivity(int stageID, int actID) {
+        Stage s = getStage(stageID);
+        Activity a = getActivity(actID);
+	    if(s == null || a == null){
 	        return false;
         }
 

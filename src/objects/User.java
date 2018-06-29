@@ -1,5 +1,4 @@
 package objects;
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,7 +31,7 @@ public class User {
 
             actID = readAddActivityToStage(stageName);
             while (actID > -1) {
-                boolean succ = project.addActivity(stageID, actID);
+                boolean succ = project.stageAddActivity(stageID, actID);
                 if( ! succ){
                     System.out.println("Activity couldn't be added to stage");
                 }
