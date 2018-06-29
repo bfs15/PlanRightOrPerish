@@ -107,10 +107,6 @@ public class Dev {
 		return activity;
 	}
 
-	public void unsetActivity() {
-        activity = null;
-	}
-
 	public String getName() {
 		return name;
 	}
