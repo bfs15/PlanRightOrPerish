@@ -39,8 +39,8 @@ public class Computer {
 		return activity;
 	}
 
-	public void unsetActivity() {
-		activity = null;
+	public boolean isAvailable() {
+		return status.isAvailable();
 	}
 
 	public Event getStatus() {

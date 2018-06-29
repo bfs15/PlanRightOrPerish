@@ -73,7 +73,10 @@ public class Project {
 			money -= d.getSalary();
 		}
 		for(Computer c : computers){
-			c.endDay();
+			boolean event = c.endDay();
+			if(event){
+				System.out.println("Computer is unavailable");
+			}
 		}
 
 		for(Activity a : getCurrentActivities()){
@@ -370,6 +373,8 @@ public class Project {
 	}
 
 	public List<Activity> getCurrentActivities() {
+		if(currentStage == null)
+			return activities;
 		return currentStage.getActivities();
 	}
 

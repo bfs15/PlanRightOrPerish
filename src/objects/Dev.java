@@ -51,11 +51,13 @@ public class Dev {
 		
 		if(isWorking && activity !=null){
 			double myWork = productivity;
-			if(activity.getType() != role)
+			if( ! activity.getType().equals(role)) {
+				System.out.println(getName() + "'s activity is not it's specialty, productivity down");
 				myWork *= 0.7;
-			String formattedMyWork = String.format("%.2f",(myWork + myWork*Math.log(activity.getComputerNo()+1)));
-			System.out.println("Work done by "+this.getName()+": "+formattedMyWork);
-            completedAct = activity.work(myWork + myWork*Math.log(activity.getComputerNo()+1));
+			}
+
+			System.out.println("Work done by "+getName());
+            completedAct = activity.work(myWork);
 			roll = status.roll();
 		}
 

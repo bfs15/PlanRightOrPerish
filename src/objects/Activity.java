@@ -15,7 +15,16 @@ public class Activity {
 	private List<Computer> computers =  new ArrayList<>();
 
 	public boolean work(double productivity) {
-		this.workDone += productivity;
+		int compNo = 0;
+		for(Computer c : computers){
+			if(c.isAvailable()){
+				++compNo;
+			}
+		}
+		double work = productivity + productivity*Math.log(compNo+1);
+		String formattedMyWork = String.format("%.2f", work);
+		System.out.println(formattedMyWork);
+		this.workDone += work;
 		//System.out.println(name+" "+this.workDone+"<-"+productivity);
 		return workDone >= cost;
 	}
