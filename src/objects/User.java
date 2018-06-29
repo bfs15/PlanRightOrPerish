@@ -18,10 +18,17 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        
+        System.out.println("Project:");
+        System.out.println(project.getDescription());
         // Print activities so user can make stages
         printActivities();
 
+        System.out.println("Type the name of the life cycle model");
+        String lifeCycleModel = scanner.nextLine();
+        project.setLifeCycleModel(lifeCycleModel);
+
+        System.out.println("Add stages to your project in order.");
         String stageName;
 
         while( !(stageName = readStageName()).isEmpty() && !stageName.equals("end")) {
@@ -121,7 +128,6 @@ public class User {
     private static void printActivities(){
         List<Activity> acts = project.getActivities();
         System.out.println("Activities:");
-
 
         for(int i = 0; i < acts.size(); i++){
             System.out.print("| ID " + i);
