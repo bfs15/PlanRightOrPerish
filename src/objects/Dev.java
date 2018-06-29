@@ -58,8 +58,8 @@ public class Dev {
 
 			System.out.println("Work done by "+getName());
             completedAct = activity.work(myWork);
-			roll = status.roll();
 		}
+		roll = status.roll();
 
 		return roll;
 	}

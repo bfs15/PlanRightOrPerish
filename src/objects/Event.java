@@ -16,6 +16,10 @@ public class Event {
 	}
 
 	public boolean roll() {
+		if(duration != 0){
+			--duration;
+			return duration != 0;
+		}
 		Random r = new Random();
 		double randNum  = r.nextDouble();
 		if(randNum < 0.1){
